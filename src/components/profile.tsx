@@ -1,4 +1,4 @@
-import styles from './profile.module.css';
+import styles from '../app/profile/profile.module.css';
 
 export default function Profile() {
     const a = "プロフィール"; 

@@ -1,7 +1,7 @@
 'use client';
 
 import {useRouter} from 'next/navigation'; // next.js　App Router用の書き方
-import styles from './shinkitouroku.module.css';
+import styles from '../app/register/shinkitouroku.module.css';
 
 export default function Shinkitouroku() {
     const router = useRouter();

@@ -12,9 +12,10 @@ export default function LoginForm() {
   const [token, setToken] = useState("");
   const router = useRouter();
 
+
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/login", new URLSearchParams({
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/login`, new URLSearchParams({
         username,
         password,
       }), {

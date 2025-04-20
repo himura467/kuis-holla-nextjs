@@ -1,5 +1,5 @@
 // src/app/profile/page.tsx
-import Profile from './profile';
+import Profile from '../../components/profile';
 
 export default function ProfilePage() {
   return (

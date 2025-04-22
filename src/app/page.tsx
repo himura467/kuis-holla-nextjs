@@ -30,7 +30,7 @@ export default function LoginForm() {
       localStorage.setItem("token", token);
       //setToken(token);
       //alert("ログインしました。");
-      router.push("/event");
+      router.push("/mypage");
     } catch (error) {
       alert("ログイン失敗：" + error.response?.data?.detail || error.message);
     }

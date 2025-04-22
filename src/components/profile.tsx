@@ -1,8 +1,12 @@
+"use client";
+
 import styles from '../app/profile/profile.module.css';
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
     const a = "プロフィール"; 
-  
+    const router = useRouter();
+
     return (
       <div className = {styles.container}>
         <h1 className = {styles.title}>{a}</h1>
@@ -43,7 +47,12 @@ export default function Profile() {
             <option value = "話しかけてください">話しかけてください</option>
         
         </select>
-        <button className = {styles.button}>登録</button>
+        <button
+            className={styles.button}
+            onClick={() => router.push("/")}
+            >
+            登録
+        </button>
       </div>
     );
   }

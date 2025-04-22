@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint:eslint": "next lint",
+    "lint:prettier": "prettier --cache --check .",
+    "lint-fix:eslint": "next lint --fix",
+    "lint-fix:prettier": "prettier --cache --write ."
   },
   "dependencies": {
     "axios": "^1.8.4",

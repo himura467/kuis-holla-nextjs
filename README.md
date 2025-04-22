@@ -18,6 +18,20 @@ NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
 .env.local
 ```
 
+## Lint エラーが発生したときは
+
+```sh
+npm run lint-fix:eslint
+```
+
+を実行して問題の箇所を調べて直してください。また、
+
+```sh
+npm run lint-fix:prettier
+```
+
+を実行してコードのフォーマットをお願いします。
+
 ## Getting Started
 
 First, run the development server:

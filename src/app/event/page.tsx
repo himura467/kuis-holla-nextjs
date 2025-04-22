@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 export default function SelectEventPage() {
   // 後でちゃんと取得したものに直す

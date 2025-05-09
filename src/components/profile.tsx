@@ -28,13 +28,18 @@ export default function Profile() {
       });
       alert("プロフィール登録完了！");
       router.push("/");
-    } catch (error: any) {
-      console.error(error);
-      alert(
-        "登録に失敗しました: " +
-          (error.response?.data?.detail || error.message),
-      );
-    }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error(error);
+        alert(
+          "登録に失敗しました: " +
+            (error.response?.data?.detail || error.message),
+        );
+      } else {
+        console.error(error);
+        alert("登録に失敗しました");
+      }
+    }    
   };
 
   return (
@@ -103,7 +108,7 @@ export default function Profile() {
         onChange={(e) => setHobby(e.target.value)}
       />
 
-      <button className={styles.button} onClick={() => router.push("/")}>
+      <button className={styles.button} onClick={handleProfileSubmit}>
         登録
       </button>
     </div>

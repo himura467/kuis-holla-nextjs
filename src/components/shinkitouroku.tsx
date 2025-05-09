@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation"; // App Router 用
 import { useState } from "react";
-import axios from "axios";
 import styles from "../app/register/shinkitouroku.module.css";
 import { useUserStore } from "../store/userStore"; // Zustandのstoreをインポート
 

@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation'; // App Router 用
-import { useState } from 'react';
-import axios from 'axios';
-import styles from '../app/register/shinkitouroku.module.css';
-import { useUserStore } from '../store/userStore'; // Zustandのstoreをインポート
+import { useRouter } from "next/navigation"; // App Router 用
+import { useState } from "react";
+import axios from "axios";
+import styles from "../app/register/shinkitouroku.module.css";
+import { useUserStore } from "../store/userStore"; // Zustandのstoreをインポート
 
 export default function Shinkitouroku() {
   const router = useRouter();
-  const [name, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const setUser = useUserStore((state) => state.setUser); // Zustandのアクション
 
   const handleNext = () => {
     if (!name || !password) {
-      alert('氏名とパスワードを入力してください');
+      alert("氏名とパスワードを入力してください");
       return;
     }
 
     setUser(name, password); // Zustandに保存
-    router.push('/profile'); // プロフィール入力画面へ遷移
+    router.push("/profile"); // プロフィール入力画面へ遷移
   };
 
   return (

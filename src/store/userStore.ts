@@ -1,5 +1,5 @@
 // src/store/userStore.ts
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface UserState {
   name: string;
@@ -8,7 +8,7 @@ interface UserState {
 }
 
 export const useUserStore = create<UserState>((set) => ({
-  name: '',
-  password: '',
+  name: "",
+  password: "",
   setUser: (name, password) => set({ name, password }),
 }));

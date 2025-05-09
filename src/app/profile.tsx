@@ -8,8 +8,13 @@ export default function Profile() {
       <h1 className={styles.title}>{a}</h1>
 
       <h2 className={styles.label}>写真登録</h2>
-        <p>※顔の分かる写真をアップロードてください</p>
-        <input className={styles.input} type="file" name="photo" accept="image/*"/>
+      <p>※顔の分かる写真をアップロードてください</p>
+      <input
+        className={styles.input}
+        type="file"
+        name="photo"
+        accept="image/*"
+      />
 
       <h2 className={styles.label}>学部・研究科</h2>
       <input className={styles.input} type="text" name="name" size={10} />
@@ -27,7 +32,6 @@ export default function Profile() {
 
       <h2 className={styles.label}>趣味</h2>
       <input className={styles.input} type="text" name="hobby" size={10} />
-
 
       <button className={styles.button}>登録</button>
     </div>

@@ -39,7 +39,7 @@ export default function Profile() {
         console.error(error);
         alert("登録に失敗しました");
       }
-    }    
+    }
   };
 
   return (

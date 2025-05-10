@@ -10,7 +10,7 @@ export default function EventRegisterForm() {
   const [place, setPlace] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [registeredUsers, setRegisteredUsers] = useState(["user123"]); //dummy
+  /*const [registeredUsers, setRegisteredUsers] = useState(["user123"]); *///dummy
 
   const handleSubmit = async () => {
     try {

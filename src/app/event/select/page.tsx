@@ -10,7 +10,7 @@ type EventType = {
 
 export default function SelectEventPage() {
   const [events, setEvents] = useState<EventType[]>([]);
-  const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+  /*const [selectedEventId, setSelectedEventId] = useState<number | null>(null);*/
 
   // APIからイベント取得
   useEffect(() => {

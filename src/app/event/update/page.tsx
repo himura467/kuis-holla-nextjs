@@ -15,26 +15,25 @@ export default function EditEventPage() {
 
   // 既存のイベント情報を取得（初期表示）
   useEffect(() => {
-  const fetchEvent = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${id}`,
-      );
-      const data = res.data;
-      setEventName(data.event_name);
-      setPlace(data.place);
-      setStartTime(data.start_time);
-      setEndTime(data.end_time);
-      setRegisteredUsers(data.registered_users || []);
-    } catch (error: unknown) {
-      const err = error as AxiosError;
-      alert("取得に失敗：" + (err.response?.data?.detail || err.message));
-    }
-  };
+    const fetchEvent = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${id}`,
+        );
+        const data = res.data;
+        setEventName(data.event_name);
+        setPlace(data.place);
+        setStartTime(data.start_time);
+        setEndTime(data.end_time);
+        setRegisteredUsers(data.registered_users || []);
+      } catch (error: unknown) {
+        const err = error as AxiosError;
+        alert("取得に失敗：" + (err.response?.data?.detail || err.message));
+      }
+    };
 
-  fetchEvent();
-}, [id]);
-
+    fetchEvent();
+  }, [id]);
 
   // PUTで更新
   const handleUpdate = async () => {

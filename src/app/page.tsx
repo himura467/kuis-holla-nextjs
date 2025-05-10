@@ -37,60 +37,32 @@ export default function LoginForm() {
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>Holla! ログインフォーム</h2>
+    <main className="container">
+      <h2 className="title">ログインフォーム</h2>
+
+      <label className="label">ユーザー名</label>
       <input
         type="text"
-        placeholder="ユーザー名"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        style={{ display: "block", marginBottom: "1rem" }}
+        className="input"
       />
+
+      <label className="label">パスワード</label>
       <input
         type="password"
-        placeholder="パスワード"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        style={{
-          display: "block",
-          marginBottom: "1rem",
-        }}
+        className="input"
       />
-      <button
-        onClick={handleLogin}
-        style={{
-          display: "block",
-          marginTop: "0.5rem",
-          fontSize: "0.8rem",
-          padding: "0.3rem 0.6rem",
-          borderRadius: "0",
-          backgroundColor: "#f8f8f8",
-        }}
-      >
+
+      <button onClick={handleLogin} className="button">
         ログイン
       </button>
 
-      <button
-        onClick={() => router.push("/register")}
-        style={{
-          display: "block",
-          marginTop: "0.5rem",
-          fontSize: "0.8rem",
-          padding: "0.3rem 0.6rem",
-          borderRadius: "0",
-          backgroundColor: "#f8f8f8",
-        }}
-      >
+      <button onClick={() => router.push("/register")} className="button">
         新規登録
       </button>
-      {/*
-      {token && (
-        <div style={{ marginTop: "1rem" }}>
-          <p>取得したトークン：</p>
-          <code style={{ wordWrap: "break-word" }}>{token}</code>
-        </div>
-      )}
-      */}
-    </div>
+    </main>
   );
 }

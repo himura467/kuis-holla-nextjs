@@ -17,7 +17,7 @@ export default function SelectEventPage() {
     const fetchEvents = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/active`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/active`,
         );
         setEvents(response.data); // [{id, event_name}, ...]
       } catch (error) {
@@ -44,10 +44,7 @@ export default function SelectEventPage() {
         <ul style={{ listStyle: "none", padding: 0 }}>
           {events.map((event) => (
             <li key={event.id}>
-              <button
-                onClick={() => handleSelect(event.id)}
-                className="button"
-              >
+              <button onClick={() => handleSelect(event.id)} className="button">
                 {event.event_name}
               </button>
             </li>

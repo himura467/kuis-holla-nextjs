@@ -17,7 +17,7 @@ export default function EditEventPage() {
     const fetchEvent = async () => {
       try {
         const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${id}`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${id}`,
         );
         const data = res.data;
         setEventName(data.event_name);
@@ -48,7 +48,7 @@ export default function EditEventPage() {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
       alert("イベントを更新しました");
     } catch (error) {
@@ -61,10 +61,18 @@ export default function EditEventPage() {
       <h1 className="title">イベント編集</h1>
 
       <label className="label">イベント名</label>
-      <input className="input" value={eventName} onChange={(e) => setEventName(e.target.value)} />
+      <input
+        className="input"
+        value={eventName}
+        onChange={(e) => setEventName(e.target.value)}
+      />
 
       <label className="label">場所</label>
-      <input className="input" value={place} onChange={(e) => setPlace(e.target.value)} />
+      <input
+        className="input"
+        value={place}
+        onChange={(e) => setPlace(e.target.value)}
+      />
 
       <label className="label">開始日時</label>
       <input

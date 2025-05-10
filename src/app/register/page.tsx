@@ -2,9 +2,5 @@
 import Shinkitouroku from "../../components/shinkitouroku";
 
 export default function Home() {
-  return (
-    
-    <Shinkitouroku />
-  
-  );
+  return <Shinkitouroku />;
 }

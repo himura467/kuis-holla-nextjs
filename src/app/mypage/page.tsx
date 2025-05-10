@@ -10,7 +10,10 @@ export default function MyPage() {
       <h1 className="title">マイページ</h1>
 
       <div>
-        <button className="button" onClick={() => router.push("/profile?from=mypage")}>
+        <button
+          className="button"
+          onClick={() => router.push("/profile?from=mypage")}
+        >
           プロフィール変更
         </button>
         <button className="button" onClick={() => router.push("/event/select")}>

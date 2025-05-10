@@ -12,11 +12,10 @@
 .title {
   font-size: 28px;
   font-weight: bold;
-  text-align: center;  /* ← 中央寄せ！ */
+  text-align: center; /* ← 中央寄せ！ */
   color: #333;
   margin-bottom: 24px;
 }
-
 
 :root {
   --container-bg: #fff4db;

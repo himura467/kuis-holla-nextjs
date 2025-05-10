@@ -1,9 +1,9 @@
 // app/layout.tsx
-import './globals.css';
-import { ReactNode } from 'react';
+import "./globals.css";
+import { ReactNode } from "react";
 
 export const metadata = {
-  title: 'Holla!',
+  title: "Holla!",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

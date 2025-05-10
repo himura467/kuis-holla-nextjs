@@ -5,7 +5,6 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function EventRegisterForm() {
-
   const router = useRouter();
   const [eventName, setEventName] = useState("");
   const [place, setPlace] = useState("");
@@ -28,10 +27,10 @@ export default function EventRegisterForm() {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
       alert("登録成功！イベントID: " + response.data.id);
-      router.push("/mypage")
+      router.push("/mypage");
     } catch (error) {
       alert("登録失敗：" + error.response?.data?.detail || error.message);
     }
@@ -42,10 +41,18 @@ export default function EventRegisterForm() {
       <h1 className="title">イベント登録</h1>
 
       <label className="label">イベント名</label>
-      <input className="input" value={eventName} onChange={(e) => setEventName(e.target.value)} />
+      <input
+        className="input"
+        value={eventName}
+        onChange={(e) => setEventName(e.target.value)}
+      />
 
       <label className="label">場所</label>
-      <input className="input" value={place} onChange={(e) => setPlace(e.target.value)} />
+      <input
+        className="input"
+        value={place}
+        onChange={(e) => setPlace(e.target.value)}
+      />
 
       <label className="label">開始日時</label>
       <input

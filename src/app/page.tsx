@@ -64,6 +64,5 @@ export default function LoginForm() {
         新規登録
       </button>
     </main>
-
   );
 }

@@ -1,25 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
-export default function EventRegisterForm() {
-
-  const router = useRouter();
+export default function EditEventPage() {
+  const { id } = useParams(); // event_id を取得
   const [eventName, setEventName] = useState("");
   const [place, setPlace] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [registeredUsers, setRegisteredUsers] = useState(["user123"]); //dummy
+  const [registeredUsers, setRegisteredUsers] = useState<string[]>([]);
 
-  const handleSubmit = async () => {
+  // 既存のイベント情報を取得（初期表示）
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${id}`
+        );
+        const data = res.data;
+        setEventName(data.event_name);
+        setPlace(data.place);
+        setStartTime(data.start_time);
+        setEndTime(data.end_time);
+        setRegisteredUsers(data.registered_users || []);
+      } catch (error) {
+        alert("イベント情報の取得に失敗しました");
+      }
+    };
+    fetchEvent();
+  }, [id]);
+
+  // PUTで更新
+  const handleUpdate = async () => {
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/register`,
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${id}`,
         {
           event_name: eventName,
-          place: place,
+          place,
           start_time: startTime,
           end_time: endTime,
           registered_users: registeredUsers,
@@ -30,16 +50,15 @@ export default function EventRegisterForm() {
           },
         }
       );
-      alert("登録成功！イベントID: " + response.data.id);
-      router.push("/mypage")
+      alert("イベントを更新しました");
     } catch (error) {
-      alert("登録失敗：" + error.response?.data?.detail || error.message);
+      alert("更新に失敗：" + (error.response?.data?.detail || error.message));
     }
   };
 
   return (
     <main className="container">
-      <h1 className="title">イベント登録</h1>
+      <h1 className="title">イベント編集</h1>
 
       <label className="label">イベント名</label>
       <input className="input" value={eventName} onChange={(e) => setEventName(e.target.value)} />
@@ -63,8 +82,8 @@ export default function EventRegisterForm() {
         onChange={(e) => setEndTime(e.target.value)}
       />
 
-      <button className="button" onClick={handleSubmit}>
-        登録
+      <button className="button" onClick={handleUpdate}>
+        更新
       </button>
     </main>
   );

@@ -15,7 +15,7 @@ export default function Profile() {
   const [hobby, setHobby] = useState("");
   const [hometown, setHometown] = useState("");
   const [language, setLanguage] = useState("");
-   // 写真ファイルの状態
+  // 写真ファイルの状態
   const [photo, setPhoto] = useState<File | null>(null);
 
   // ファイル選択時の処理
@@ -39,7 +39,7 @@ export default function Profile() {
           hobbies: hobby.split(","),
           hometown,
           languages: language.split(","),
-        }
+        },
       );
 
       const userId = registerRes.data.id; // バックエンドが返す user.id を取得
@@ -49,15 +49,16 @@ export default function Profile() {
         const formData = new FormData();
         formData.append("file", photo);
 
-        await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${userId}/upload_image`,
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${userId}/upload_image`,
           formData,
           {
             headers: {
-            "Content-Type": "multipart/form-data",
+              "Content-Type": "multipart/form-data",
             },
-          }
+          },
         );
-}
+      }
       alert("プロフィール登録完了！");
       router.push("/");
     } catch (error: unknown) {

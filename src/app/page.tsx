@@ -25,7 +25,7 @@ export default function LoginForm() {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
-        }
+        },
       );
 
       //ここで認証確認してからマイページへ遷移
@@ -34,13 +34,10 @@ export default function LoginForm() {
       });
 
       router.push("/mypage");
-
     } catch (error) {
       alert("ログイン失敗：" + (error.response?.data?.detail || error.message));
     }
   };
-
-
 
   return (
     <main className="container">

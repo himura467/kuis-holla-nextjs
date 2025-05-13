@@ -18,7 +18,6 @@ export default function SelectEventPage() {
     setSelectedEventId((prev) => prev);
   }, []);
 
-
   // APIからイベント取得
   useEffect(() => {
     const fetchEvents = async () => {

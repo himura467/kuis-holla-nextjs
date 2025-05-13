@@ -15,17 +15,49 @@ export default function Profile() {
   const [hobby, setHobby] = useState("");
   const [hometown, setHometown] = useState("");
   const [language, setLanguage] = useState("");
+   // 写真ファイルの状態
+  const [photo, setPhoto] = useState<File | null>(null);
+
+  // ファイル選択時の処理
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPhoto(file);
+    }
+  };
+
   const handleProfileSubmit = async () => {
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
-        name,
-        password,
-        gender,
-        department,
-        hobbies: hobby.split(","),
-        hometown,
-        languages: language.split(","),
-      });
+      // プロフィール登録（文字情報）
+      const registerRes = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/register`,
+        {
+          name,
+          password,
+          gender,
+          department,
+          hobbies: hobby.split(","),
+          hometown,
+          languages: language.split(","),
+        }
+      );
+
+      const userId = registerRes.data.id; // バックエンドが返す user.id を取得
+
+      // 写真が選択されていた場合のみアップロード
+      if (photo) {
+        const formData = new FormData();
+        formData.append("file", photo);
+
+        await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${userId}/upload_image`,
+          formData,
+          {
+            headers: {
+            "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+}
       alert("プロフィール登録完了！");
       router.push("/");
     } catch (error: unknown) {
@@ -53,6 +85,7 @@ export default function Profile() {
         type="file"
         name="photo"
         accept="image/*"
+        onChange={handleFileChange} // 写真選択イベント追加
       />
 
       <h2 className={styles.label}>学部・研究科</h2>

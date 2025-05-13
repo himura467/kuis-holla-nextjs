@@ -1,9 +1,28 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import axios from "axios";
 
 export default function MyPage() {
   const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`, {
+          withCredentials: true, // ← Cookie を含める
+        });
+        // 200 OK ならそのまま表示
+      } catch (err) {
+        // 認証エラーならログインページへ
+        alert("ログインが必要です");
+        router.push("/");
+      }
+    };
+
+    checkAuth();
+  }, [router]);
 
   return (
     <main className="container">

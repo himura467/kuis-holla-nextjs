@@ -14,27 +14,33 @@ export default function LoginForm() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/login`,
         new URLSearchParams({
           username,
           password,
         }),
         {
+          withCredentials: true,
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
-        },
+        }
       );
-      const token = response.data.access_token;
-      localStorage.setItem("token", token);
-      //setToken(token);
-      //alert("ログインしました。");
+
+      //ここで認証確認してからマイページへ遷移
+      await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`, {
+        withCredentials: true,
+      });
+
       router.push("/mypage");
+
     } catch (error) {
-      alert("ログイン失敗：" + error.response?.data?.detail || error.message);
+      alert("ログイン失敗：" + (error.response?.data?.detail || error.message));
     }
   };
+
+
 
   return (
     <main className="container">

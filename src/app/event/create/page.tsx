@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -11,6 +11,10 @@ export default function EventRegisterForm() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [registeredUsers, setRegisteredUsers] = useState(["user123"]);
+
+  useEffect(() => {
+    setRegisteredUsers((prev) => prev);
+  }, []);
 
   const handleSubmit = async () => {
     try {

@@ -10,7 +10,14 @@ type EventType = {
 
 export default function SelectEventPage() {
   const [events, setEvents] = useState<EventType[]>([]);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+
+  useEffect(() => {
+    setSelectedEventId((prev) => prev);
+  }, []);
+
 
   // APIからイベント取得
   useEffect(() => {

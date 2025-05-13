@@ -14,8 +14,9 @@ export default function MyPage() {
           withCredentials: true, // ← Cookie を含める
         });
         // 200 OK ならそのまま表示
-      } catch (err) {
-        // 認証エラーならログインページへ
+      } catch (err: unknown) {
+        const axiosError = err as AxiosError;
+        console.error("認証確認エラー:", axiosError); // ← ここで使うことで Lint 回避
         alert("ログインが必要です");
         router.push("/");
       }

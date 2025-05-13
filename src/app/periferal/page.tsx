@@ -7,7 +7,10 @@ interface DetectedDevice {
   id: string;
 }
 
-export default function DetectPage() {
+// アプリケーション固有のサービスUUID
+const APP_SERVICE_UUID = '00001800-0000-1000-8000-00805f9b34fb';  // アプリケーション固有の UUID
+
+export default function DetectedPage() {
   const [devices, setDevices] = useState<DetectedDevice[]>([]);
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -18,8 +21,11 @@ export default function DetectPage() {
       setError('');
 
       const device = await navigator.bluetooth.requestDevice({
-        acceptAllDevices: true,
-        optionalServices: [] // Add specific services if needed
+        // このアプリケーションをインストールしている端末のみを検出
+        filters: [{
+          services: [APP_SERVICE_UUID]  // アプリケーション固有のサービスを持つデバイスのみをフィルタリング
+        }],
+        optionalServices: []
       });
 
       if (device) {
@@ -37,7 +43,7 @@ export default function DetectPage() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Bluetooth Device Detection</h1>
+      <h1 className="text-2xl font-bold mb-4">Bluetooth Peripheral Device Detection</h1>
       
       <button
         onClick={startScanning}
@@ -54,9 +60,9 @@ export default function DetectPage() {
       )}
 
       <div className="mt-6">
-        <h2 className="text-xl font-semibold mb-2">Detected Devices</h2>
+        <h2 className="text-xl font-semibold mb-2">Detected Peripheral Devices</h2>
         {devices.length === 0 ? (
-          <p>No devices detected yet</p>
+          <p>No peripheral devices detected yet</p>
         ) : (
           <ul className="space-y-2">
             {devices.map((device: DetectedDevice) => (

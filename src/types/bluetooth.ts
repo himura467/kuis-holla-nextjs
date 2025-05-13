@@ -34,6 +34,13 @@ declare global {
     connected: boolean;
     connect(): Promise<BluetoothRemoteGATTServer>;
     disconnect(): void;
+    getPrimaryService(service: BluetoothServiceUUID): Promise<BluetoothRemoteGATTService>;
+  }
+
+  interface BluetoothRemoteGATTService {
+    uuid: string;
+    device: BluetoothDevice;
+    isPrimary: boolean;
   }
 }
 

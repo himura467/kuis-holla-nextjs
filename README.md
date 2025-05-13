@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 プロジェクトのルートディレクトリに `.env.local` ファイルを作成し、以下のように記述してください：
 
 ```env
-NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 ```
 
 ### 説明：

@@ -15,7 +15,7 @@ export default function ConversationTopic() {
   const [topics, setTopics] = useState<string[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const targetUserId = 2;
+  const targetUserId = 1;
 
   const imageUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${targetUserId}/image`;
   const profileUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${targetUserId}/profile`;

@@ -33,6 +33,17 @@ export default function Profile() {
         hobbies: hobby.split(","),
         hometown,
         languages: language.split(","),
+        q1: 1,
+        q2: 2, //dummy
+      });
+      console.log({
+        name,
+        password,
+        gender,
+        department,
+        hobby,
+        hometown,
+        language,
       });
 
       const userId = registerRes.data.id;

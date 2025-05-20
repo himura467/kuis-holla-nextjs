@@ -112,7 +112,8 @@ export default function ProfileEdit() {
 
   const handleImageDelete = async () => {
     if (initialImageUrl) {
-      setImageUrl(initialImageUrl); // ← 初期画像に戻す
+      setImageUrl(initialImageUrl);
+      setPhoto(null);
     }
   };
 

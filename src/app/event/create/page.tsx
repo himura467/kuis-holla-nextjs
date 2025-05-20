@@ -9,6 +9,7 @@ export default function EventRegisterForm() {
   const router = useRouter();
   const [eventName, setEventName] = useState("");
   const [place, setPlace] = useState("");
+  const [eventAbstract, setEventAbstract] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
@@ -21,12 +22,13 @@ export default function EventRegisterForm() {
           place: place,
           start_time: startTime,
           end_time: endTime,
+          event_abstract: eventAbstract,
         },
         {
           headers: {
             "Content-Type": "application/json",
           },
-          withCredentials: true, // ★ これを追加！
+          withCredentials: true,
         },
       );
       alert("登録成功！イベントID: " + response.data.id);
@@ -49,11 +51,18 @@ export default function EventRegisterForm() {
         onChange={(e) => setEventName(e.target.value)}
       />
 
-      <label className="label">概要</label>
+      <label className="label">場所</label>
       <input
         className="input"
         value={place}
         onChange={(e) => setPlace(e.target.value)}
+      />
+
+      <label className="label">概要</label>
+      <input
+        className="input"
+        value={eventAbstract}
+        onChange={(e) => setEventAbstract(e.target.value)}
       />
 
       <label className="label">開始日時</label>

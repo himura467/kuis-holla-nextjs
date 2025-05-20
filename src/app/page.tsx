@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { AxiosError } from "axios";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 // import { responseCookiesToRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
@@ -34,8 +35,10 @@ export default function LoginForm() {
       });
 
       router.push("/mypage");
-    } catch (error) {
-      alert("ログイン失敗：" + (error.response?.data?.detail || error.message));
+    } catch (error: unknown) {
+      const err = error as AxiosError;
+      const data = err.response?.data as { detail?: string };
+      alert("ログイン失敗：" + (data?.detail || err.message));
     }
   };
 

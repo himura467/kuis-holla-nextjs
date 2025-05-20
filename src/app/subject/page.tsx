@@ -1,1 +1,7 @@
-//マッチング後に話題を生成する
+export default function SubjectPage() {
+  return (
+    <div>
+      <h1>Subject Page</h1>
+    </div>
+  );
+}

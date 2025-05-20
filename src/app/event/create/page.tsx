@@ -3,6 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 export default function EventRegisterForm() {
   const router = useRouter();
@@ -30,8 +31,10 @@ export default function EventRegisterForm() {
       );
       alert("登録成功！イベントID: " + response.data.id);
       router.push("/mypage");
-    } catch (error) {
-      alert("登録失敗：" + error.response?.data?.detail || error.message);
+    } catch (error: unknown) {
+      const err = error as AxiosError;
+      const data = err.response?.data as { detail?: string };
+      alert("登録失敗：" + data?.detail || err.message);
     }
   };
 

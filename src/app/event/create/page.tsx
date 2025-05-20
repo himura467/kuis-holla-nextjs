@@ -27,7 +27,6 @@ export default function EventRegisterForm() {
           },
 
           withCredentials: true, // ★ これを追加！
-           5175959bc60bd9aea6f9f5f83bbc4c3b98c49838
         },
       );
       alert("登録成功！イベントID: " + response.data.id);

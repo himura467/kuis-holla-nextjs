@@ -32,14 +32,19 @@ export default function ConversationTopic() {
         const topicRes = await axios.post(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/topic/openai/${targetUserId}`,
           {},
-          { withCredentials: true }
+          { withCredentials: true },
         );
         const rawTopic: string = topicRes.data.suggested_topic;
-        const topicList = rawTopic.split(/\n|・|- /).map((t) => t.trim()).filter(Boolean);
+        const topicList = rawTopic
+          .split(/\n|・|- /)
+          .map((t) => t.trim())
+          .filter(Boolean);
         setTopics(topicList);
 
         // プロフィール取得
-        const profileRes = await axios.get(profileUrl, { withCredentials: true });
+        const profileRes = await axios.get(profileUrl, {
+          withCredentials: true,
+        });
         setProfile(profileRes.data);
       } catch (error) {
         console.error("データ取得エラー:", error);
@@ -73,11 +78,22 @@ export default function ConversationTopic() {
         {/* プロフィール情報 */}
         {profile && (
           <div className="text-sm space-y-1">
-            <p><strong>名前:</strong> {profile.name}</p>
-            <p><strong>学部:</strong> {profile.department || "未登録"}</p>
-            <p><strong>出身地:</strong> {profile.hometown || "未登録"}</p>
-            <p><strong>趣味:</strong> {profile.hobby || "未登録"}</p>
-            <p><strong>話せる言語:</strong> {(profile.languages || []).join(", ") || "未登録"}</p>
+            <p>
+              <strong>名前:</strong> {profile.name}
+            </p>
+            <p>
+              <strong>学部:</strong> {profile.department || "未登録"}
+            </p>
+            <p>
+              <strong>出身地:</strong> {profile.hometown || "未登録"}
+            </p>
+            <p>
+              <strong>趣味:</strong> {profile.hobby || "未登録"}
+            </p>
+            <p>
+              <strong>話せる言語:</strong>{" "}
+              {(profile.languages || []).join(", ") || "未登録"}
+            </p>
           </div>
         )}
       </div>

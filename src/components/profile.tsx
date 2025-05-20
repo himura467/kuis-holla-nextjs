@@ -2,7 +2,7 @@
 
 import { useUserStore } from "../store/userStore";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import styles from "../app/profile/profile.module.css";
 
@@ -25,26 +25,20 @@ export default function Profile() {
   const handleProfileSubmit = async () => {
     try {
       // ① プロフィール登録（name, password を含む）
-      const registerRes = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
-        name,
-        password,
-        gender,
-        department,
-        hobbies: hobby.split(","),
-        hometown,
-        languages: language.split(","),
-        q1: 1,
-        q2: 2, //dummy
-      });
-      console.log({
-        name,
-        password,
-        gender,
-        department,
-        hobby,
-        hometown,
-        language,
-      });
+      const registerRes = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/register`,
+        {
+          name,
+          password,
+          gender,
+          department,
+          hobbies: hobby.split(","),
+          hometown,
+          languages: language.split(","),
+          q1: 1,
+          q2: 2, //dummy
+        },
+      );
 
       const userId = registerRes.data.id;
 

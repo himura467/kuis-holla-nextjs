@@ -2,7 +2,7 @@
 
 import { useUserStore } from "../store/userStore";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import styles from "../app/profile/profile.module.css";
 
@@ -17,27 +17,6 @@ export default function Profile() {
   const [language, setLanguage] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
 
-  // userId を Cookie 経由で取得して保持
-  const [userId, setUserId] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
-          {
-            withCredentials: true,
-          },
-        );
-        setUserId(res.data.id);
-      } catch (err) {
-        console.error(err);
-        alert("ユーザー情報の取得に失敗しました");
-      }
-    };
-    fetchUserId();
-  }, []);
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) setPhoto(file);
@@ -46,15 +25,22 @@ export default function Profile() {
   const handleProfileSubmit = async () => {
     try {
       // ① プロフィール登録（name, password を含む）
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
-        name,
-        password,
-        gender,
-        department,
-        hobbies: hobby.split(","),
-        hometown,
-        languages: language.split(","),
-      });
+      const registerRes = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/register`,
+        {
+          name,
+          password,
+          gender,
+          department,
+          hobbies: hobby.split(","),
+          hometown,
+          languages: language.split(","),
+          q1: 1,
+          q2: 2, //dummy
+        },
+      );
+
+      const userId = registerRes.data.id;
 
       // ② 写真アップロード（userId を使う）
       if (photo && userId !== null) {
@@ -62,7 +48,7 @@ export default function Profile() {
         formData.append("file", photo);
 
         await axios.post(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${userId}/upload_image`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${userId}/register_image`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },

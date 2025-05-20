@@ -28,7 +28,8 @@ export default function EditEventPage() {
         setRegisteredUsers(data.registered_users || []);
       } catch (error: unknown) {
         const err = error as AxiosError;
-        alert("取得に失敗：" + (err.response?.data?.detail || err.message));
+        const data = err.response?.data as { detail?: string };
+        alert("取得に失敗：" + (data?.detail || err.message));
       }
     };
 

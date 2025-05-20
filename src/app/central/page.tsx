@@ -17,7 +17,9 @@ export default function DetectPage() {
   const [devices, setDevices] = useState<DetectedDevice[]>([]);
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [selectedDevice, setSelectedDevice] = useState<DetectedDevice | null>(null);
+  const [selectedDevice, setSelectedDevice] = useState<DetectedDevice | null>(
+    null,
+  );
   const [message, setMessage] = useState<string>("");
   const [receivedData, setReceivedData] = useState<string>("");
 
@@ -30,16 +32,16 @@ export default function DetectPage() {
         filters: [
           {
             services: [SERVICE_UUID],
-            name: "KuisHolla"
-          }
-        ]
+            name: "KuisHolla",
+          },
+        ],
       });
 
       if (device) {
         const newDevice: DetectedDevice = {
           name: device.name || "Unknown Device",
           id: device.id,
-          device: device
+          device: device,
         };
 
         setDevices((prev) => [...prev, newDevice]);
@@ -64,18 +66,22 @@ export default function DetectPage() {
       }
 
       const service = await server.getPrimaryService(SERVICE_UUID);
-      const characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+      const characteristic =
+        await service.getCharacteristic(CHARACTERISTIC_UUID);
 
       // Set up notification handler
       await characteristic.startNotifications();
-      characteristic.addEventListener('characteristicvaluechanged', (event: Event & { target: BluetoothRemoteGATTCharacteristic }) => {
-        const value = event.target.value;
-        if (value) {
-          const decoder = new TextDecoder('utf-8');
-          const receivedValue = decoder.decode(value);
-          setReceivedData(receivedValue);
-        }
-      });
+      characteristic.addEventListener(
+        "characteristicvaluechanged",
+        (event: Event & { target: BluetoothRemoteGATTCharacteristic }) => {
+          const value = event.target.value;
+          if (value) {
+            const decoder = new TextDecoder("utf-8");
+            const receivedValue = decoder.decode(value);
+            setReceivedData(receivedValue);
+          }
+        },
+      );
 
       setSelectedDevice({ ...device, characteristic });
     } catch (err) {
@@ -104,7 +110,7 @@ export default function DetectPage() {
       }
 
       const value = await selectedDevice.characteristic.readValue();
-      const decoder = new TextDecoder('utf-8');
+      const decoder = new TextDecoder("utf-8");
       setReceivedData(decoder.decode(value));
     } catch (err) {
       setError((err as Error).message);
@@ -169,7 +175,7 @@ export default function DetectPage() {
           <h2 className="text-xl font-semibold mb-4">
             Connected to: {selectedDevice.name}
           </h2>
-          
+
           <button
             onClick={disconnectDevice}
             className="bg-red-500 text-white px-3 py-1 rounded mb-4"

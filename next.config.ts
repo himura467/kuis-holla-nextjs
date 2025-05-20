@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ['bleno']
-  }
+    serverComponentsExternalPackages: ["bleno"],
+  },
 };
 
 export default nextConfig;

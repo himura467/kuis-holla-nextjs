@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const bleno = require("bleno");
 
 // BLE service and characteristic UUIDs (valid UUID format)

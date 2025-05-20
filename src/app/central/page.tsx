@@ -22,12 +22,13 @@ export default function DetectPage() {
 
       // このアプリケーションをインストールしている端末のみを検出
       const device = await navigator.bluetooth.requestDevice({
-        filters: [
-          {
-            services: [APP_SERVICE_UUID], // アプリケーション固有のサービスを持つデバイスのみをフィルタリング
-          },
-        ],
-        optionalServices: [],
+        // filters: [
+        //   {
+        //     services: [APP_SERVICE_UUID], // アプリケーション固有のサービスを持つデバイスのみをフィルタリング
+        //   },
+        // ],
+        // optionalServices: [],
+        acceptAllDevices: true,
       });
 
       // デバイスが見つかった場合はリストに追加

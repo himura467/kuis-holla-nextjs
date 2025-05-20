@@ -46,7 +46,7 @@ export default function EventRegisterForm() {
         onChange={(e) => setEventName(e.target.value)}
       />
 
-      <label className="label">場所</label>
+      <label className="label">概要</label>
       <input
         className="input"
         value={place}

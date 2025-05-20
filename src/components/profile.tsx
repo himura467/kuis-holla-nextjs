@@ -17,27 +17,6 @@ export default function Profile() {
   const [language, setLanguage] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
 
-  // userId を Cookie 経由で取得して保持
-  const [userId, setUserId] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
-          {
-            withCredentials: true,
-          },
-        );
-        setUserId(res.data.id);
-      } catch (err) {
-        console.error(err);
-        alert("ユーザー情報の取得に失敗しました");
-      }
-    };
-    fetchUserId();
-  }, []);
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) setPhoto(file);
@@ -46,7 +25,7 @@ export default function Profile() {
   const handleProfileSubmit = async () => {
     try {
       // ① プロフィール登録（name, password を含む）
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
+      const registerRes = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
         name,
         password,
         gender,
@@ -56,13 +35,15 @@ export default function Profile() {
         languages: language.split(","),
       });
 
+      const userId = registerRes.data.id;
+
       // ② 写真アップロード（userId を使う）
       if (photo && userId !== null) {
         const formData = new FormData();
         formData.append("file", photo);
 
         await axios.post(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${userId}/upload_image`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${userId}/register_image`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },

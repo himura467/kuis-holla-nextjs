@@ -31,6 +31,7 @@ export default function EventRegisterForm() {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials:true, //追加
         },
       );
       alert("登録成功！イベントID: " + response.data.id);

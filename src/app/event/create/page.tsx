@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -10,11 +10,6 @@ export default function EventRegisterForm() {
   const [place, setPlace] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [registeredUsers, setRegisteredUsers] = useState(["user123"]);
-
-  useEffect(() => {
-    setRegisteredUsers((prev) => prev);
-  }, []);
 
   const handleSubmit = async () => {
     try {
@@ -25,13 +20,14 @@ export default function EventRegisterForm() {
           place: place,
           start_time: startTime,
           end_time: endTime,
-          registered_users: registeredUsers,
         },
         {
           headers: {
             "Content-Type": "application/json",
           },
-          withCredentials:true, //追加
+
+          withCredentials: true, // ★ これを追加！
+           5175959bc60bd9aea6f9f5f83bbc4c3b98c49838
         },
       );
       alert("登録成功！イベントID: " + response.data.id);

@@ -1,86 +1,85 @@
 .container {
-    background-color: #fff4db;
-    padding: 40px;
-    border-radius: 16px;
-    max-width: 500px;
-    margin: 60px auto;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-  }
-  
-  .title {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 24px;
-    text-align: center;
-    color: #333;
-  }
-  
-  .description {
-    font-size: 16px;
-    margin-bottom: 20px;
-    color: #444;
-    text-align: center;
-  }
-  
-  .subTitle {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 30px;
-    margin-bottom: 10px;
-    color: #444;
-    text-align: center;
-  }
-  
-  .participantList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .participantItem {
-    font-size: 16px;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    color: #333;
-    text-align: center;
-  }
-  
-  .joinButton {
-    margin-top: 30px;
-    width: 100%;
-    padding: 12px;
-    background-color: #ffc40c;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .joinButton:hover {
-    background-color: #ffcc40;
-  }
+  background-color: #fff4db;
+  padding: 40px;
+  border-radius: 16px;
+  max-width: 500px;
+  margin: 60px auto;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
 
-  .buttonGroup {
-    display: flex;
-    gap: 16px;
-    margin-top: 30px;
-  }
-  
-  .button {
-    flex: 1;
-    padding: 12px;
-    background-color: #ffc40c;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .button:hover {
-    background-color: #ffcc40;
-  }
-  
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #333;
+}
+
+.description {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #444;
+  text-align: center;
+}
+
+.subTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #444;
+  text-align: center;
+}
+
+.participantList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.participantItem {
+  font-size: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  color: #333;
+  text-align: center;
+}
+
+.joinButton {
+  margin-top: 30px;
+  width: 100%;
+  padding: 12px;
+  background-color: #ffc40c;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.joinButton:hover {
+  background-color: #ffcc40;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.button {
+  flex: 1;
+  padding: 12px;
+  background-color: #ffc40c;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover {
+  background-color: #ffcc40;
+}

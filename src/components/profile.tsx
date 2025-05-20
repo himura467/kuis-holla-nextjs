@@ -2,7 +2,7 @@
 
 import { useUserStore } from "../store/userStore";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "../app/profile/profile.module.css";
 
@@ -15,37 +15,49 @@ export default function Profile() {
   const [hobby, setHobby] = useState("");
   const [hometown, setHometown] = useState("");
   const [language, setLanguage] = useState("");
-  // 写真ファイルの状態
   const [photo, setPhoto] = useState<File | null>(null);
 
-  // ファイル選択時の処理
+  // userId を Cookie 経由で取得して保持
+  const [userId, setUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
+          {
+            withCredentials: true,
+          },
+        );
+        setUserId(res.data.id);
+      } catch (err) {
+        console.error(err);
+        alert("ユーザー情報の取得に失敗しました");
+      }
+    };
+    fetchUserId();
+  }, []);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setPhoto(file);
-    }
+    if (file) setPhoto(file);
   };
 
   const handleProfileSubmit = async () => {
     try {
-      // プロフィール登録（文字情報）
-      const registerRes = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/register`,
-        {
-          name,
-          password,
-          gender,
-          department,
-          hobbies: hobby.split(","),
-          hometown,
-          languages: language.split(","),
-        },
-      );
+      // ① プロフィール登録（name, password を含む）
+      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
+        name,
+        password,
+        gender,
+        department,
+        hobbies: hobby.split(","),
+        hometown,
+        languages: language.split(","),
+      });
 
-      const userId = registerRes.data.id; // バックエンドが返す user.id を取得
-
-      // 写真が選択されていた場合のみアップロード
-      if (photo) {
+      // ② 写真アップロード（userId を使う）
+      if (photo && userId !== null) {
         const formData = new FormData();
         formData.append("file", photo);
 
@@ -53,24 +65,19 @@ export default function Profile() {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${userId}/upload_image`,
           formData,
           {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
+            headers: { "Content-Type": "multipart/form-data" },
+            withCredentials: true,
           },
         );
       }
+
       alert("プロフィール登録完了！");
       router.push("/");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        console.error(error);
-        alert(
-          "登録に失敗しました: " +
-            (error.response?.data?.detail || error.message),
-        );
+        alert("登録失敗: " + (error.response?.data?.detail || error.message));
       } else {
-        console.error(error);
-        alert("登録に失敗しました");
+        alert("登録失敗");
       }
     }
   };

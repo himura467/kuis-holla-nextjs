@@ -40,14 +40,16 @@ export default function EventDetailPage() {
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${id}/join`,
         { status },
-        { withCredentials: true }
+        { withCredentials: true },
       );
-      alert(`${status === "initiator" ? "話しかけたい人" : "話しかけられたい人"}で参加しました！`);
+      alert(
+        `${status === "initiator" ? "話しかけたい人" : "話しかけられたい人"}で参加しました！`,
+      );
 
       // 最新の参加者情報を取得して再描画
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${id}`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setEventData(res.data);
     } catch (err) {

@@ -156,14 +156,27 @@ export default function DetectPage() {
               <li key={device.id} className="p-3 border rounded">
                 <p>Name: {device.name}</p>
                 <p className="text-sm text-gray-600">ID: {device.id}</p>
-                {!selectedDevice && (
-                  <button
-                    onClick={() => connectToDevice(device)}
-                    className="mt-2 bg-green-500 text-white px-3 py-1 rounded"
-                  >
-                    Connect
-                  </button>
-                )}
+                <div className="mt-2 space-x-2">
+                  {!selectedDevice && (
+                    <>
+                      <button
+                        onClick={() => connectToDevice(device)}
+                        className="bg-green-500 text-white px-3 py-1 rounded"
+                      >
+                        Connect
+                      </button>
+                      <button
+                        onClick={async () => {
+                          await connectToDevice(device);
+                          await readValue();
+                        }}
+                        className="bg-blue-500 text-white px-3 py-1 rounded"
+                      >
+                        話しかけたい
+                      </button>
+                    </>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
@@ -184,14 +197,6 @@ export default function DetectPage() {
           </button>
 
           <div className="space-y-4">
-            <div>
-              <button
-                onClick={readValue}
-                className="bg-blue-500 text-white px-3 py-1 rounded"
-              >
-                Read Value
-              </button>
-            </div>
 
             <div className="flex space-x-2">
               <input
@@ -212,7 +217,7 @@ export default function DetectPage() {
 
             {receivedData && (
               <div className="mt-4">
-                <h3 className="font-semibold">Received Data:</h3>
+                <h3 className="font-semibold">User ID:</h3>
                 <p className="mt-1 p-2 bg-gray-100 rounded">{receivedData}</p>
               </div>
             )}

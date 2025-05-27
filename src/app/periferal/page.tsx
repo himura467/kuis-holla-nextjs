@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 interface ServerStatus {
   status: "running" | "stopped" | "error";
@@ -13,10 +14,35 @@ export default function PeripheralPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  const [userId] = useState("user123"); // TODO: Replace with actual user ID from your auth system
+  const [userId, setUserId] = useState<string | null>(null);
 
-  // Start BLE server when page loads
+  // Fetch user ID when component mounts
   useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
+          {
+            withCredentials: true,
+          },
+        );
+        setUserId(res.data.id);
+      } catch (error) {
+        console.error("Failed to fetch user ID:", error);
+        setServerStatus({
+          status: "error",
+          message: "Failed to fetch user ID",
+        });
+      }
+    };
+
+    fetchUserId();
+  }, []);
+
+  // Start BLE server when userId is available
+  useEffect(() => {
+    if (!userId) return;
+
     const startServerWithUserId = async () => {
       try {
         const response = await fetch("/api/ble", {

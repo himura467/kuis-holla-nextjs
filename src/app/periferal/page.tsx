@@ -57,7 +57,7 @@ export default function PeripheralPage() {
             onCharacteristicWrite: (value: string) => {
               // Update the centralUserId when we receive a write
               setCentralUserId(value);
-            }
+            },
           }),
         });
         const data = await response.json();

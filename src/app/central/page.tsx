@@ -32,7 +32,7 @@ export default function DetectPage() {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
           {
             withCredentials: true,
-          }
+          },
         );
         setUserId(res.data.id);
       } catch (error) {
@@ -202,7 +202,7 @@ export default function DetectPage() {
                             }
                             const encoder = new TextEncoder();
                             await selectedDevice.characteristic.writeValue(
-                              encoder.encode(userId)
+                              encoder.encode(userId),
                             );
                           } catch (err) {
                             setError((err as Error).message);
@@ -236,7 +236,6 @@ export default function DetectPage() {
           </button>
 
           <div className="space-y-4">
-
             <div className="flex space-x-2">
               <input
                 type="text"

@@ -4,7 +4,7 @@ export const runtime = "nodejs";
 import bleServer from "../../../ble/main.js";
 
 export async function POST(request: Request) {
-  const { action, userId, onCharacteristicWrite } = await request.json();
+  const { action, userId } = await request.json();
 
   if (action === "start") {
     const status = bleServer.getServerStatus();

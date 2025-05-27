@@ -57,3 +57,18 @@
 .button:hover {
   background-color: #ffcc40;
 }
+
+.addButton {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: transparent;
+  color: #898585;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.addButton:hover {
+  background-color: #fdf6c3; /* やさしい黄色のホバー */
+}
+

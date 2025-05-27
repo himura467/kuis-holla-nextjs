@@ -37,7 +37,7 @@ export default function PeripheralPage() {
       }
     };
 
-    fetchUserId();
+    void fetchUserId();
   }, []);
 
   // Set up SSE listener for BLE events

@@ -8,6 +8,7 @@ interface DetectedDevice {
   id: string;
   device?: BluetoothDevice;
   characteristic?: BluetoothRemoteGATTCharacteristic;
+  cleanup?: () => void;
 }
 
 // Custom UUIDs matching our peripheral
@@ -41,8 +42,64 @@ export default function DetectPage() {
       }
     };
 
-    fetchUserId();
+    void fetchUserId();
   }, []);
+
+  // Handle automatic read/write when device is connected
+  useEffect(() => {
+    const readValue = async () => {
+      try {
+        setError("");
+        if (!selectedDevice?.characteristic) {
+          throw new Error("No device connected");
+        }
+
+        console.log("Reading characteristic value...");
+        const value = await selectedDevice.characteristic.readValue();
+        const decoder = new TextDecoder("utf-8");
+        const decodedValue = decoder.decode(value);
+        console.log("Read value:", decodedValue);
+        setReceivedData(decodedValue);
+      } catch (err) {
+        setError((err as Error).message);
+      }
+    };
+
+    const writeValue = async () => {
+      try {
+        setError("");
+        if (!selectedDevice?.characteristic || !message) {
+          throw new Error("No device connected or message empty");
+        }
+
+        console.log("Writing value:", message);
+        const encoder = new TextEncoder();
+        await selectedDevice.characteristic.writeValue(encoder.encode(message));
+        console.log("Write complete");
+        setMessage("");
+      } catch (err) {
+        setError((err as Error).message);
+      }
+    };
+
+    const handleDeviceConnection = async () => {
+      if (selectedDevice?.characteristic && userId) {
+        try {
+          await delay(500);
+          // First read the peripheral's userId
+          await readValue();
+          await delay(500);
+          // Then send our userId
+          setMessage(userId);
+          await writeValue();
+        } catch (err) {
+          setError((err as Error).message);
+        }
+      }
+    };
+
+    void handleDeviceConnection();
+  }, [selectedDevice, userId, setError, setMessage, message]);
 
   const startScanning = async () => {
     try {
@@ -73,22 +130,8 @@ export default function DetectPage() {
     }
   };
 
-  const waitForCharacteristic = async (maxAttempts = 10): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      let attempts = 0;
-      const checkCharacteristic = () => {
-        if (selectedDevice?.characteristic) {
-          resolve();
-        } else if (attempts >= maxAttempts) {
-          reject(new Error("Timeout waiting for characteristic"));
-        } else {
-          attempts++;
-          setTimeout(checkCharacteristic, 100);
-        }
-      };
-      checkCharacteristic();
-    });
-  };
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   const connectToDevice = async (device: DetectedDevice) => {
     try {
@@ -97,16 +140,21 @@ export default function DetectPage() {
         throw new Error("Device not found");
       }
 
+      console.log("Connecting to GATT server...");
       const server = await device.device.gatt?.connect();
       if (!server) {
         throw new Error("Failed to connect to GATT server");
       }
 
+      console.log("Getting primary service...");
       const service = await server.getPrimaryService(SERVICE_UUID);
+
+      console.log("Getting characteristic...");
       const characteristic =
         await service.getCharacteristic(CHARACTERISTIC_UUID);
 
       // Set up notification handler
+      console.log("Starting notifications...");
       await characteristic.startNotifications();
       characteristic.addEventListener(
         "characteristicvaluechanged",
@@ -129,41 +177,14 @@ export default function DetectPage() {
 
   const disconnectDevice = async () => {
     try {
+      if (selectedDevice?.cleanup) {
+        selectedDevice.cleanup();
+      }
       if (selectedDevice?.device) {
         await selectedDevice.device.gatt?.disconnect();
         setSelectedDevice(null);
         setReceivedData("");
       }
-    } catch (err) {
-      setError((err as Error).message);
-    }
-  };
-
-  const readValue = async () => {
-    try {
-      setError("");
-      if (!selectedDevice?.characteristic) {
-        throw new Error("No device connected");
-      }
-
-      const value = await selectedDevice.characteristic.readValue();
-      const decoder = new TextDecoder("utf-8");
-      setReceivedData(decoder.decode(value));
-    } catch (err) {
-      setError((err as Error).message);
-    }
-  };
-
-  const writeValue = async () => {
-    try {
-      setError("");
-      if (!selectedDevice?.characteristic || !message) {
-        throw new Error("No device connected or message empty");
-      }
-
-      const encoder = new TextEncoder();
-      await selectedDevice.characteristic.writeValue(encoder.encode(message));
-      setMessage("");
     } catch (err) {
       setError((err as Error).message);
     }
@@ -195,37 +216,12 @@ export default function DetectPage() {
                 <p className="text-sm text-gray-600">ID: {device.id}</p>
                 <div className="mt-2 space-x-2">
                   {!selectedDevice && (
-                    <>
-                      <button
-                        onClick={() => connectToDevice(device)}
-                        className="bg-green-500 text-white px-3 py-1 rounded"
-                      >
-                        Connect
-                      </button>
-                      <button
-                        onClick={async () => {
-                          try {
-                            if (!userId) {
-                              setError("User ID not available");
-                              return;
-                            }
-                            await connectToDevice(device);
-                            await waitForCharacteristic();
-                            // First read the peripheral's userId
-                            await readValue();
-                            // Then send our userId using writeValue
-                            setMessage(userId);
-                            await writeValue();
-                          } catch (err) {
-                            setError((err as Error).message);
-                          }
-                        }}
-                        className="bg-blue-500 text-white px-3 py-1 rounded"
-                        disabled={!userId}
-                      >
-                        話しかけたい
-                      </button>
-                    </>
+                    <button
+                      onClick={() => connectToDevice(device)}
+                      className="bg-green-500 text-white px-3 py-1 rounded"
+                    >
+                      Connect
+                    </button>
                   )}
                 </div>
               </li>
@@ -248,23 +244,6 @@ export default function DetectPage() {
           </button>
 
           <div className="space-y-4">
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Enter message to send"
-                className="border rounded px-2 py-1 flex-1"
-              />
-              <button
-                onClick={writeValue}
-                disabled={!message}
-                className="bg-green-500 text-white px-3 py-1 rounded disabled:bg-gray-400"
-              >
-                Send
-              </button>
-            </div>
-
             {receivedData && (
               <div className="mt-4">
                 <h3 className="font-semibold">User ID:</h3>

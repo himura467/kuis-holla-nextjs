@@ -3,7 +3,6 @@
 
 import React, { useState } from "react";
 import { AxiosError } from "axios";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 // import { responseCookiesToRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 

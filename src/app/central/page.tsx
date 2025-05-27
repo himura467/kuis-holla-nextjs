@@ -27,22 +27,23 @@ export default function DetectPage() {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
-          {
-            withCredentials: true,
-          },
-        );
-        setUserId(res.data.id);
-      } catch (error) {
-        console.error("Failed to fetch user ID:", error);
-        setError("Failed to fetch user ID");
-      }
-    };
+    // const fetchUserId = async () => {
+    //   try {
+    //     const res = await axios.get(
+    //       `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
+    //       {
+    //         withCredentials: true,
+    //       },
+    //     );
+    //     setUserId(res.data.id);
+    //   } catch (error) {
+    //     console.error("Failed to fetch user ID:", error);
+    //     setError("Failed to fetch user ID");
+    //   }
+    // };
 
-    void fetchUserId();
+    // void fetchUserId();
+    setUserId("aaaaa")
   }, []);
 
   // Handle automatic read/write when device is connected

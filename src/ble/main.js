@@ -1,5 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const bleno = require("bleno");
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const EventEmitter = require("events");
+
+const bleEvents = new EventEmitter();
 
 // BLE service and characteristic UUIDs (valid UUID format)
 const SERVICE_UUID = "00000000-0000-0000-0000-000000000000";
@@ -13,13 +17,14 @@ let userId = null;
 
 // Custom characteristic
 class CustomCharacteristic extends bleno.Characteristic {
-  constructor(userId) {
+  constructor(userId, onWriteCallback) {
     super({
       uuid: CHARACTERISTIC_UUID,
       properties: ["read", "write", "notify"],
       value: null,
     });
     this._value = Buffer.from(userId || "no-user-id");
+    this._onWriteCallback = onWriteCallback;
   }
 
   onReadRequest(offset, callback) {
@@ -30,21 +35,22 @@ class CustomCharacteristic extends bleno.Characteristic {
   onWriteRequest(data, offset, withoutResponse, callback) {
     console.log("Write request received:", data.toString());
     this._value = data;
+    bleEvents.emit("characteristicWrite", data.toString());
     callback(this.RESULT_SUCCESS);
   }
 }
 
 // Primary service
 class CustomService extends bleno.PrimaryService {
-  constructor(userId) {
+  constructor(userId, onWriteCallback) {
     super({
       uuid: SERVICE_UUID,
-      characteristics: [new CustomCharacteristic(userId)],
+      characteristics: [new CustomCharacteristic(userId, onWriteCallback)],
     });
   }
 }
 
-function setupBlenoEventHandlers(userId) {
+function setupBlenoEventHandlers(userId, onWriteCallback) {
   // State change handler
   bleno.on("stateChange", (state) => {
     console.log("Bluetooth state changed to:", state);
@@ -78,7 +84,7 @@ function setupBlenoEventHandlers(userId) {
     console.log("Advertising started successfully");
 
     // Set up services once advertising has started
-    bleno.setServices([new CustomService(userId)], (error) => {
+    bleno.setServices([new CustomService(userId, onWriteCallback)], (error) => {
       if (error) {
         console.error("Failed to set services:", error);
       } else {
@@ -137,6 +143,7 @@ module.exports = {
   startBleServer,
   stopBleServer,
   getServerStatus,
+  bleEvents,
 };
 
 // If this file is run directly with node, start the server

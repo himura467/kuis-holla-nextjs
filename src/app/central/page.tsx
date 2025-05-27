@@ -73,6 +73,23 @@ export default function DetectPage() {
     }
   };
 
+  const waitForCharacteristic = async (maxAttempts = 10): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      let attempts = 0;
+      const checkCharacteristic = () => {
+        if (selectedDevice?.characteristic) {
+          resolve();
+        } else if (attempts >= maxAttempts) {
+          reject(new Error("Timeout waiting for characteristic"));
+        } else {
+          attempts++;
+          setTimeout(checkCharacteristic, 100);
+        }
+      };
+      checkCharacteristic();
+    });
+  };
+
   const connectToDevice = async (device: DetectedDevice) => {
     try {
       setError("");
@@ -193,9 +210,10 @@ export default function DetectPage() {
                               return;
                             }
                             await connectToDevice(device);
+                            await waitForCharacteristic();
                             // First read the peripheral's userId
                             await readValue();
-                            // Then send our userId
+                            // Then send our userId using writeValue
                             setMessage(userId);
                             await writeValue();
                           } catch (err) {

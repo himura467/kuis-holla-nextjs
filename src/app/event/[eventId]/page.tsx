@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import EventDetail from "@/components/event_detail";
 
@@ -23,6 +23,7 @@ type EventData = {
 
 export default function EventDetailPage() {
   const { eventId } = useParams();
+  const router = useRouter();
   const [eventData, setEventData] = useState<EventData | null>(null);
 
   useEffect(() => {
@@ -46,12 +47,11 @@ export default function EventDetailPage() {
       alert(
         `${status === "initiator" ? "話しかけたい人" : "話しかけられたい人"}で参加しました！`,
       );
-
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${eventId}/details`,
-        { withCredentials: true },
-      );
-      setEventData(res.data);
+      if (status === "initiator") {
+        router.push("/central");
+      } else {
+        router.push("/peripheral");
+      }
     } catch (err) {
       alert("参加に失敗：" + err.message);
     }

@@ -23,13 +23,15 @@ class CustomCharacteristic extends bleno.Characteristic {
       properties: ["read", "write", "notify"],
       value: null,
     });
-    this._value = Buffer.from(userId || "no-user-id");
+    this._value = Buffer.from("no-user-id");
+    this._userId = userId;
     this._onWriteCallback = onWriteCallback;
   }
 
   onReadRequest(offset, callback) {
     console.log("Read request received");
-    callback(this.RESULT_SUCCESS, this._value);
+    console.log("User ID:", this._userId);
+    callback(this.RESULT_SUCCESS, Buffer.from(this._userId));
   }
 
   onWriteRequest(data, offset, withoutResponse, callback) {

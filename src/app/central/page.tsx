@@ -51,7 +51,7 @@ export default function DetectPage() {
       try {
         setError("");
         if (!selectedDevice?.characteristic) {
-          throw new Error("No device connected");
+          return;
         }
 
         console.log("Reading characteristic value...");
@@ -69,7 +69,7 @@ export default function DetectPage() {
       try {
         setError("");
         if (!selectedDevice?.characteristic || !message) {
-          throw new Error("No device connected or message empty");
+          return;
         }
 
         console.log("Writing value:", message);

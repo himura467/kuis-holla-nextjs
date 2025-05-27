@@ -8,9 +8,13 @@ export default function LogoutButton() {
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/logout`, {}, {
-        withCredentials: true,
-      });
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/logout`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
       router.push("/");
     } catch (err) {
       console.error("ログアウト失敗", err);
@@ -18,10 +22,7 @@ export default function LogoutButton() {
   };
 
   return (
-    <button
-        className="logoutButton"
-        onClick={handleLogout}
-    >
+    <button className="logoutButton" onClick={handleLogout}>
       ログアウト
     </button>
   );

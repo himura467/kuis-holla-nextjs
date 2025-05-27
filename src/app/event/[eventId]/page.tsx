@@ -27,9 +27,13 @@ export default function EventDetailPage() {
 
   useEffect(() => {
     if (!eventId) return;
-    axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${eventId}/details`, {
-        withCredentials: true,
-      })
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${eventId}/details`,
+        {
+          withCredentials: true,
+        },
+      )
       .then((res) => setEventData(res.data))
       .catch((err) => alert("読み込み失敗：" + err.message));
   }, [eventId]);
@@ -69,7 +73,6 @@ export default function EventDetailPage() {
     />
   );
 }
-
 
 function formatDateTime(dt: string): string {
   const d = new Date(dt);

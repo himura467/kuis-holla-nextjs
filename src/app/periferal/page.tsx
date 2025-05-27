@@ -13,15 +13,47 @@ export default function PeripheralPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  const [userId] = useState("user123"); // TODO: Replace with actual user ID from your auth system
+
   // Start BLE server when page loads
   useEffect(() => {
-    startServer();
+    const startServerWithUserId = async () => {
+      try {
+        const response = await fetch("/api/ble", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action: "start",
+            userId: userId
+          }),
+        });
+        const data = await response.json();
+
+        if (data.status === "started" || data.status === "already_running") {
+          setServerStatus({ status: "running" });
+        } else {
+          setServerStatus({
+            status: "error",
+            message: data.message || "Failed to start server",
+          });
+        }
+      } catch (error) {
+        setServerStatus({
+          status: "error",
+          message: (error as Error).message,
+        });
+      }
+    };
+
+    startServerWithUserId();
 
     // Cleanup on unmount
     return () => {
       stopServer();
     };
-  }, []);
+  }, [userId]);
 
   // Periodically check server status
   useEffect(() => {

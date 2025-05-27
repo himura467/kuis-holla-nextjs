@@ -9,16 +9,17 @@ const PERIPHERAL_NAME = "KuisHolla";
 // State management
 let isAdvertising = false;
 let blenoInstance = null;
+let userId = null;
 
 // Custom characteristic
 class CustomCharacteristic extends bleno.Characteristic {
-  constructor() {
+  constructor(userId) {
     super({
       uuid: CHARACTERISTIC_UUID,
       properties: ["read", "write", "notify"],
       value: null,
     });
-    this._value = Buffer.from("Hello from KuisHolla!");
+    this._value = Buffer.from(userId || "no-user-id");
   }
 
   onReadRequest(offset, callback) {
@@ -35,15 +36,15 @@ class CustomCharacteristic extends bleno.Characteristic {
 
 // Primary service
 class CustomService extends bleno.PrimaryService {
-  constructor() {
+  constructor(userId) {
     super({
       uuid: SERVICE_UUID,
-      characteristics: [new CustomCharacteristic()],
+      characteristics: [new CustomCharacteristic(userId)],
     });
   }
 }
 
-function setupBlenoEventHandlers() {
+function setupBlenoEventHandlers(userId) {
   // State change handler
   bleno.on("stateChange", (state) => {
     console.log("Bluetooth state changed to:", state);
@@ -77,7 +78,7 @@ function setupBlenoEventHandlers() {
     console.log("Advertising started successfully");
 
     // Set up services once advertising has started
-    bleno.setServices([new CustomService()], (error) => {
+    bleno.setServices([new CustomService(userId)], (error) => {
       if (error) {
         console.error("Failed to set services:", error);
       } else {
@@ -104,10 +105,11 @@ function setupBlenoEventHandlers() {
   blenoInstance = bleno;
 }
 
-function startBleServer() {
+function startBleServer(options = {}) {
   if (!blenoInstance) {
-    setupBlenoEventHandlers();
-    console.log("BLE peripheral server starting...");
+    userId = options.userId || "no-user-id";
+    setupBlenoEventHandlers(userId);
+    console.log("BLE peripheral server starting with userId:", userId);
     return true;
   }
   return false;

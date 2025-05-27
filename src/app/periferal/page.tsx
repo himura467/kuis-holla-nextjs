@@ -15,6 +15,7 @@ export default function PeripheralPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const [userId, setUserId] = useState<string | null>(null);
+  const [centralUserId, setCentralUserId] = useState<string | null>(null);
 
   // Fetch user ID when component mounts
   useEffect(() => {
@@ -52,7 +53,11 @@ export default function PeripheralPage() {
           },
           body: JSON.stringify({
             action: "start",
-            userId: userId
+            userId: userId,
+            onCharacteristicWrite: (value: string) => {
+              // Update the centralUserId when we receive a write
+              setCentralUserId(value);
+            }
           }),
         });
         const data = await response.json();
@@ -78,6 +83,7 @@ export default function PeripheralPage() {
     // Cleanup on unmount
     return () => {
       stopServer();
+      setCentralUserId(null); // Clear the central user ID when stopping
     };
   }, [userId]);
 
@@ -150,6 +156,7 @@ export default function PeripheralPage() {
 
       if (data.status === "stopped" || data.status === "not_running") {
         setServerStatus({ status: "stopped" });
+        setCentralUserId(null); // Clear the central user ID when server stops
       } else {
         setServerStatus({
           status: "error",
@@ -221,6 +228,13 @@ export default function PeripheralPage() {
             <p>Name: KuisHolla</p>
             <p>Service UUID: 00000000-0000-0000-0000-000000000000</p>
             <p>Characteristic UUID: 00000001-0000-0000-0000-000000000000</p>
+            <p>My User ID: {userId}</p>
+            {centralUserId && (
+              <div className="mt-4 p-3 bg-blue-50 rounded">
+                <h3 className="font-semibold mb-2">話しかけてきたユーザー</h3>
+                <p>User ID: {centralUserId}</p>
+              </div>
+            )}
           </div>
         </div>
       )}

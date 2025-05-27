@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 interface DetectedDevice {
   name: string;
@@ -22,6 +23,26 @@ export default function DetectPage() {
   );
   const [message, setMessage] = useState<string>("");
   const [receivedData, setReceivedData] = useState<string>("");
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
+          {
+            withCredentials: true,
+          }
+        );
+        setUserId(res.data.id);
+      } catch (error) {
+        console.error("Failed to fetch user ID:", error);
+        setError("Failed to fetch user ID");
+      }
+    };
+
+    fetchUserId();
+  }, []);
 
   const startScanning = async () => {
     try {
@@ -167,10 +188,28 @@ export default function DetectPage() {
                       </button>
                       <button
                         onClick={async () => {
-                          await connectToDevice(device);
-                          await readValue();
+                          try {
+                            if (!userId) {
+                              setError("User ID not available");
+                              return;
+                            }
+                            await connectToDevice(device);
+                            // First read the peripheral's userId
+                            await readValue();
+                            // Then send our userId
+                            if (!selectedDevice?.characteristic) {
+                              throw new Error("No device connected");
+                            }
+                            const encoder = new TextEncoder();
+                            await selectedDevice.characteristic.writeValue(
+                              encoder.encode(userId)
+                            );
+                          } catch (err) {
+                            setError((err as Error).message);
+                          }
                         }}
                         className="bg-blue-500 text-white px-3 py-1 rounded"
+                        disabled={!userId}
                       >
                         話しかけたい
                       </button>

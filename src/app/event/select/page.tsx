@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 type EventType = {
   id: number;
@@ -10,13 +11,7 @@ type EventType = {
 
 export default function SelectEventPage() {
   const [events, setEvents] = useState<EventType[]>([]);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
-
-  useEffect(() => {
-    setSelectedEventId((prev) => prev);
-  }, []);
+  const router = useRouter();
 
   // APIからイベント取得
   useEffect(() => {
@@ -25,20 +20,18 @@ export default function SelectEventPage() {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/active`,
         );
-        setEvents(response.data); // [{id, event_name}, ...]
+        setEvents(response.data);
       } catch (error) {
         console.error("イベント取得失敗:", error);
         alert("イベント情報の取得に失敗しました。");
       }
     };
-
     fetchEvents();
   }, []);
 
   const handleSelect = (eventId: number) => {
-    setSelectedEventId(eventId);
     alert(`イベントID ${eventId} を選択しました`);
-    // router.push(`/event/${eventId}`);
+    router.push(`/event/${eventId}`);
   };
 
   return (

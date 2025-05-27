@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import LogoutButton from "@/components/logout";
 import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 
@@ -42,7 +43,7 @@ export default function MyPage() {
           "マイページ"
         )}
       </h1>
-
+      <LogoutButton />
       <div>
         <button
           className="button"

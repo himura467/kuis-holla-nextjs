@@ -53,7 +53,6 @@ export default function DetectPage() {
         filters: [
           {
             services: [SERVICE_UUID],
-            name: "KuisHolla",
           },
         ],
       });
@@ -197,13 +196,8 @@ export default function DetectPage() {
                             // First read the peripheral's userId
                             await readValue();
                             // Then send our userId
-                            if (!selectedDevice?.characteristic) {
-                              throw new Error("No device connected");
-                            }
-                            const encoder = new TextEncoder();
-                            await selectedDevice.characteristic.writeValue(
-                              encoder.encode(userId),
-                            );
+                            setMessage(userId);
+                            await writeValue();
                           } catch (err) {
                             setError((err as Error).message);
                           }

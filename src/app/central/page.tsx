@@ -45,43 +45,43 @@ export default function DetectPage() {
     void fetchUserId();
   }, []);
 
-  const readValue = async () => {
-    try {
-      setError("");
-      if (!selectedDevice?.characteristic) {
-        throw new Error("No device connected");
-      }
-
-      console.log("Reading characteristic value...");
-      const value = await selectedDevice.characteristic.readValue();
-      const decoder = new TextDecoder("utf-8");
-      const decodedValue = decoder.decode(value);
-      console.log("Read value:", decodedValue);
-      setReceivedData(decodedValue);
-    } catch (err) {
-      setError((err as Error).message);
-    }
-  };
-
-  const writeValue = async () => {
-    try {
-      setError("");
-      if (!selectedDevice?.characteristic || !message) {
-        throw new Error("No device connected or message empty");
-      }
-
-      console.log("Writing value:", message);
-      const encoder = new TextEncoder();
-      await selectedDevice.characteristic.writeValue(encoder.encode(message));
-      console.log("Write complete");
-      setMessage("");
-    } catch (err) {
-      setError((err as Error).message);
-    }
-  };
-
   // Handle automatic read/write when device is connected
   useEffect(() => {
+    const readValue = async () => {
+      try {
+        setError("");
+        if (!selectedDevice?.characteristic) {
+          throw new Error("No device connected");
+        }
+
+        console.log("Reading characteristic value...");
+        const value = await selectedDevice.characteristic.readValue();
+        const decoder = new TextDecoder("utf-8");
+        const decodedValue = decoder.decode(value);
+        console.log("Read value:", decodedValue);
+        setReceivedData(decodedValue);
+      } catch (err) {
+        setError((err as Error).message);
+      }
+    };
+
+    const writeValue = async () => {
+      try {
+        setError("");
+        if (!selectedDevice?.characteristic || !message) {
+          throw new Error("No device connected or message empty");
+        }
+
+        console.log("Writing value:", message);
+        const encoder = new TextEncoder();
+        await selectedDevice.characteristic.writeValue(encoder.encode(message));
+        console.log("Write complete");
+        setMessage("");
+      } catch (err) {
+        setError((err as Error).message);
+      }
+    };
+
     const handleDeviceConnection = async () => {
       if (selectedDevice?.characteristic && userId) {
         try {
@@ -99,7 +99,7 @@ export default function DetectPage() {
     };
 
     void handleDeviceConnection();
-  }, [selectedDevice, userId, setError, setMessage, readValue, writeValue]);
+  }, [selectedDevice, userId, setError, setMessage, message]);
 
   const startScanning = async () => {
     try {

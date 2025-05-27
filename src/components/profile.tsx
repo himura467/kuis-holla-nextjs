@@ -8,12 +8,14 @@ import styles from "../app/profile/profile.module.css";
 export default function Profile() {
   const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
+
   const [gender, setGender] = useState("");
   const [department, setDepartment] = useState("");
-  const [hobby, setHobby] = useState("");
   const [hometown, setHometown] = useState("");
   const [language, setLanguage] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
+
+  const [hobbies, setHobbies] = useState<string[]>([""]); // ← 複数入力対応
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -21,13 +23,16 @@ export default function Profile() {
   };
 
   const handleProfileSubmit = () => {
+    // 空欄を除いた趣味だけ保存
+    const filteredHobbies = hobbies.filter((h) => h.trim() !== "");
+
     // Zustand に保存（送信はしない）
     setUser("gender", gender);
     setUser("department", department);
     setUser("hometown", hometown);
-    setUser("hobbies", hobby.split(","));
     setUser("languages", language.split(","));
     setUser("photo", photo);
+    setUser("hobbies", filteredHobbies);
 
     router.push("/question"); // 次のステップへ
   };
@@ -83,12 +88,28 @@ export default function Profile() {
       />
 
       <h2 className={styles.label}>趣味</h2>
-      <input
-        className={styles.input}
-        type="text"
-        value={hobby}
-        onChange={(e) => setHobby(e.target.value)}
-      />
+      {hobbies.map((hobby, index) => (
+        <input
+          key={index}
+          className={styles.input}
+          type="text"
+          value={hobby}
+          onChange={(e) => {
+            const newHobbies = [...hobbies];
+            newHobbies[index] = e.target.value;
+            setHobbies(newHobbies);
+          }}
+        />
+      ))}
+
+      <button
+        type="button"
+        className={styles.button}
+        onClick={() => setHobbies([...hobbies, ""])}
+        style={{ marginTop: "10px", backgroundColor: "#ddd", color: "#333" }}
+      >
+        +項目を追加する
+      </button>
 
       <button className={styles.button} onClick={handleProfileSubmit}>
         次へ

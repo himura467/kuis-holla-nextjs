@@ -39,19 +39,22 @@ export default function QuestionPage() {
         q4: stateQ4,
       } = useUserStore.getState();
 
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
-        name,
-        password,
-        gender,
-        department,
-        hometown,
-        hobbies,
-        languages,
-        q1: stateQ1,
-        q2: stateQ2,
-        q3: stateQ3,
-        q4: stateQ4,
-      });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/register`,
+        {
+          name,
+          password,
+          gender,
+          department,
+          hometown,
+          hobbies,
+          languages,
+          q1: stateQ1,
+          q2: stateQ2,
+          q3: stateQ3,
+          q4: stateQ4,
+        },
+      );
 
       const userId = res.data.id;
 
@@ -65,14 +68,12 @@ export default function QuestionPage() {
           {
             headers: { "Content-Type": "multipart/form-data" },
             withCredentials: true,
-          }
+          },
         );
       }
 
       alert("登録が完了しました！");
-      router.push("/");  // ← ここを "/login" ではなく "/" に戻す
-
-
+      router.push("/"); // ← ここを "/login" ではなく "/" に戻す
     } catch (error) {
       console.error(error);
       alert("登録に失敗しました。");
@@ -82,9 +83,24 @@ export default function QuestionPage() {
   // 質問をまとめて定義
   const questions = [
     { id: "q1", text: "1. 活発、外向的だと思う。", value: q1, setter: setQ1 },
-    { id: "q2", text: "2. ひかえめで、おとなしいと思う。", value: q2, setter: setQ2 },
-    { id: "q3", text: "3. 心配性で、うろたえやすいと思う。", value: q3, setter: setQ3 },
-    { id: "q4", text: "4. 冷静で、気分が安定していると思う。", value: q4, setter: setQ4 },
+    {
+      id: "q2",
+      text: "2. ひかえめで、おとなしいと思う。",
+      value: q2,
+      setter: setQ2,
+    },
+    {
+      id: "q3",
+      text: "3. 心配性で、うろたえやすいと思う。",
+      value: q3,
+      setter: setQ3,
+    },
+    {
+      id: "q4",
+      text: "4. 冷静で、気分が安定していると思う。",
+      value: q4,
+      setter: setQ4,
+    },
   ];
 
   return (

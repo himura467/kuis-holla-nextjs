@@ -14,7 +14,10 @@ interface UserState {
   q2: number;
   q3: number;
   q4: number;
-  setUser: <K extends keyof Omit<UserState, 'setUser' | 'resetUser'>>(key: K, value: UserState[K]) => void;
+  setUser: <K extends keyof Omit<UserState, "setUser" | "resetUser">>(
+    key: K,
+    value: UserState[K],
+  ) => void;
   resetUser: () => void;
 }
 

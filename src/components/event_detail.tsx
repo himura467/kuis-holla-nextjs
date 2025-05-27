@@ -10,6 +10,9 @@ type Participant = {
 type Props = {
   name: string;
   description: string;
+  place: string;
+  startTime: string;
+  endTime: string;
   participants: Participant[];
   onJoinAsInitiator: () => void;
   onJoinAsReceiver: () => void;
@@ -18,6 +21,9 @@ type Props = {
 export default function EventDetail({
   name,
   description,
+  place,
+  startTime,
+  endTime,
   participants,
   onJoinAsInitiator,
   onJoinAsReceiver,
@@ -25,15 +31,35 @@ export default function EventDetail({
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{name}</h1>
-      <p className={styles.description}>{description}</p>
+
+      <div className={styles.infoSection}>
+        <div className={styles.infoRow}>
+          <span className={styles.label}>イベント概要</span>
+          <span className={styles.value}>{description}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <span className={styles.label}>場所</span>
+          <span className={styles.value}>{place}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <span className={styles.label}>時間</span>
+          <span className={styles.value}>
+            {startTime} 〜 {endTime}
+          </span>
+        </div>
+      </div>
 
       <h2 className={styles.subTitle}>参加者一覧</h2>
       <ul className={styles.participantList}>
-        {participants.map((p, i) => (
-          <li key={p.id ?? i} className={styles.participantItem}>
-            {p.name ?? "名前なし"}
-          </li>
-        ))}
+        {participants.length === 0 ? (
+          <li className={styles.participantItem}>名前なし</li>
+        ) : (
+          participants.map((p, i) => (
+            <li key={p.id ?? i} className={styles.participantItem}>
+              {p.name ?? "名前なし"}
+            </li>
+          ))
+        )}
       </ul>
 
       <div className={styles.buttonGroup}>

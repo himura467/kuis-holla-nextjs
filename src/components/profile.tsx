@@ -36,7 +36,9 @@ export default function Profile() {
           hometown,
           languages: language.split(","),
           q1: 1,
-          q2: 2, //dummy
+          q2: 1,
+          q3: 2,
+          q4: 3 //dummy
         },
       );
 

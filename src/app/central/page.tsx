@@ -42,7 +42,7 @@ export default function DetectPage() {
     // };
 
     // void fetchUserId();
-    setUserId("aaaaa")
+    setUserId("aaaaa");
   }, []);
 
   // Handle automatic read/write when device is connected

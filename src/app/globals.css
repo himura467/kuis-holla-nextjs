@@ -1,12 +1,25 @@
 /* app/globals.css */
 
 .container {
+  position: relative;
   background-color: #fff4db;
   padding: 40px;
   border-radius: 16px;
   max-width: 500px;
   margin: 60pt auto;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.logoutButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 8px 16px;
+  background-color: rgb(255, 255, 255);
+  color: #000000;
+  border: "2px solid #ffc40c";
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .title {

@@ -30,7 +30,7 @@ export default function EventDetailPage() {
     axios
       .get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${eventId}/details`,
-        { withCredentials: true }
+        { withCredentials: true },
       )
       .then((res) => setEventData(res.data))
       .catch((err) => alert("読み込み失敗：" + err.message));
@@ -41,15 +41,15 @@ export default function EventDetailPage() {
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${eventId}/join`,
         { status },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       alert(
-        `${status === "initiator" ? "話しかけたい人" : "話しかけられたい人"}で参加しました！`
+        `${status === "initiator" ? "話しかけたい人" : "話しかけられたい人"}で参加しました！`,
       );
 
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${eventId}/details`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setEventData(res.data);
     } catch (err) {

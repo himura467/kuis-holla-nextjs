@@ -19,27 +19,25 @@ export default function PeripheralPage() {
 
   // Fetch user ID when component mounts
   useEffect(() => {
-    // const fetchUserId = async () => {
-    //   try {
-    //     const res = await axios.get(
-    //       `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
-    //       {
-    //         withCredentials: true,
-    //       },
-    //     );
-    //     setUserId(res.data.id);
-    //   } catch (error) {
-    //     console.error("Failed to fetch user ID:", error);
-    //     setServerStatus({
-    //       status: "error",
-    //       message: "Failed to fetch user ID",
-    //     });
-    //   }
-    // };
-    //
-    // fetchUserId();
+    const fetchUserId = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
+          {
+            withCredentials: true,
+          },
+        );
+        setUserId(res.data.id);
+      } catch (error) {
+        console.error("Failed to fetch user ID:", error);
+        setServerStatus({
+          status: "error",
+          message: "Failed to fetch user ID",
+        });
+      }
+    };
 
-    setUserId("abc123");
+    fetchUserId();
   }, []);
 
   // Set up SSE listener for BLE events

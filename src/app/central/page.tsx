@@ -130,7 +130,8 @@ export default function DetectPage() {
     }
   };
 
-  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   const connectToDevice = async (device: DetectedDevice) => {
     try {
@@ -147,9 +148,10 @@ export default function DetectPage() {
 
       console.log("Getting primary service...");
       const service = await server.getPrimaryService(SERVICE_UUID);
-      
+
       console.log("Getting characteristic...");
-      const characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+      const characteristic =
+        await service.getCharacteristic(CHARACTERISTIC_UUID);
 
       // Set up notification handler
       console.log("Starting notifications...");

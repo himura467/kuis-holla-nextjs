@@ -58,12 +58,6 @@ export default function MyPage() {
           イベントを開催
         </button>
       </div>
-
-      <div style={{ marginTop: "20px" }}>
-        <button className="button" onClick={() => router.push("/")}>
-          ログインページへ戻る
-        </button>
-      </div>
     </main>
   );
 }

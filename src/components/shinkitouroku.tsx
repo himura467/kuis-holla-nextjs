@@ -17,7 +17,8 @@ export default function Shinkitouroku() {
       return;
     }
 
-    setUser(name, password); // Zustandに保存
+    setUser("name", name);
+    setUser("password", password); // Zustandに保存
     router.push("/profile"); // プロフィール入力画面へ遷移
   };
 

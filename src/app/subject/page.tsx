@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface Profile {
   name: string;
@@ -16,6 +17,7 @@ export default function ConversationTopic() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const targetUserId = 1;
+  const router = useRouter();
 
   const imageUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${targetUserId}/image`;
   const profileUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${targetUserId}/profile`;
@@ -107,6 +109,9 @@ export default function ConversationTopic() {
           ))}
         </ul>
       </div>
+      <button onClick={() => router.push("/")} className="button">
+        会話終了
+      </button>
     </main>
   );
 }

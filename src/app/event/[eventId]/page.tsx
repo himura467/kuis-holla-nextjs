@@ -12,33 +12,33 @@ type Participant = {
 
 type EventData = {
   id: string;
-  name: string;
+  event_name: string;
   place: string;
   start_time: string;
   end_time: string;
   registered_users: Participant[];
   creater_id: string;
+  event_abstract: string;
 };
 
 export default function EventDetailPage() {
-  const { id } = useParams();
+  const { eventId } = useParams();
   const [eventData, setEventData] = useState<EventData | null>(null);
 
   useEffect(() => {
-    if (!id) return;
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${id}`, {
+    if (!eventId) return;
+    axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${eventId}/details`, {
         withCredentials: true,
       })
       .then((res) => setEventData(res.data))
       .catch((err) => alert("読み込み失敗：" + err.message));
-  }, [id]);
+  }, [eventId]);
 
   // 共通の参加処理関数
   const handleJoin = async (status: "initiator" | "receiver") => {
     try {
       await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${id}/join`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${eventId}/join`,
         { status },
         { withCredentials: true },
       );
@@ -48,7 +48,7 @@ export default function EventDetailPage() {
 
       // 最新の参加者情報を取得して再描画
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/${eventId}/details`,
         { withCredentials: true },
       );
       setEventData(res.data);
@@ -61,14 +61,15 @@ export default function EventDetailPage() {
 
   return (
     <EventDetail
-      name={eventData.name}
-      description={`場所: ${eventData.place} ／ ${formatDateTime(eventData.start_time)} 〜 ${formatDateTime(eventData.end_time)}`}
+      name={eventData.event_name}
+      description={`${eventData.event_abstract},場所: ${eventData.place} ／ ${formatDateTime(eventData.start_time)} 〜 ${formatDateTime(eventData.end_time)}`}
       participants={eventData.registered_users}
       onJoinAsInitiator={() => handleJoin("initiator")}
       onJoinAsReceiver={() => handleJoin("receiver")}
     />
   );
 }
+
 
 function formatDateTime(dt: string): string {
   const d = new Date(dt);

@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../app/event/[id]/event_detail.module.css";
+import styles from "../app/event/[eventId]/event_detail.module.css";
 
 type Participant = {
   id: string;
@@ -29,9 +29,9 @@ export default function EventDetail({
 
       <h2 className={styles.subTitle}>参加者一覧</h2>
       <ul className={styles.participantList}>
-        {participants.map((p) => (
-          <li key={p.id} className={styles.participantItem}>
-            {p.name}
+        {participants.map((p, i) => (
+          <li key={p.id ?? i} className={styles.participantItem}>
+            {p.name ?? "名前なし"}
           </li>
         ))}
       </ul>

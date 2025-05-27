@@ -19,26 +19,44 @@ export default function PeripheralPage() {
 
   // Fetch user ID when component mounts
   useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
-          {
-            withCredentials: true,
-          },
-        );
-        setUserId(res.data.id);
-      } catch (error) {
-        console.error("Failed to fetch user ID:", error);
-        setServerStatus({
-          status: "error",
-          message: "Failed to fetch user ID",
-        });
-      }
+    // const fetchUserId = async () => {
+    //   try {
+    //     const res = await axios.get(
+    //       `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
+    //       {
+    //         withCredentials: true,
+    //       },
+    //     );
+    //     setUserId(res.data.id);
+    //   } catch (error) {
+    //     console.error("Failed to fetch user ID:", error);
+    //     setServerStatus({
+    //       status: "error",
+    //       message: "Failed to fetch user ID",
+    //     });
+    //   }
+    // };
+    //
+    // fetchUserId();
+
+    setUserId("abc123");
+  }, []);
+
+  // Set up SSE listener for BLE events
+  useEffect(() => {
+    if (serverStatus.status !== "running") return;
+
+    const eventSource = new EventSource("/api/ble/events");
+    eventSource.onmessage = (event) => {
+      console.log("Received central userId:", event.data);
+      setCentralUserId(event.data);
     };
 
-    fetchUserId();
-  }, []);
+    return () => {
+      eventSource.close();
+      setCentralUserId(null);
+    };
+  }, [serverStatus.status]);
 
   // Start BLE server when userId is available
   useEffect(() => {
@@ -54,10 +72,6 @@ export default function PeripheralPage() {
           body: JSON.stringify({
             action: "start",
             userId: userId,
-            onCharacteristicWrite: (value: string) => {
-              // Update the centralUserId when we receive a write
-              setCentralUserId(value);
-            },
           }),
         });
         const data = await response.json();
@@ -120,7 +134,10 @@ export default function PeripheralPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ action: "start" }),
+        body: JSON.stringify({
+          action: "start",
+          userId: userId,
+        }),
       });
       const data = await response.json();
 
@@ -221,7 +238,7 @@ export default function PeripheralPage() {
         </button>
       </div>
 
-      {serverStatus.status === "running" && (
+      {serverStatus.status === "running" && userId && (
         <div className="mt-6 p-4 border rounded bg-green-50">
           <h2 className="text-lg font-semibold mb-2">Server Information</h2>
           <div className="space-y-2">

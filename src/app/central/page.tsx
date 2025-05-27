@@ -53,7 +53,6 @@ export default function DetectPage() {
         filters: [
           {
             services: [SERVICE_UUID],
-            name: "KuisHolla",
           },
         ],
       });
@@ -72,6 +71,23 @@ export default function DetectPage() {
     } finally {
       setIsScanning(false);
     }
+  };
+
+  const waitForCharacteristic = async (maxAttempts = 10): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      let attempts = 0;
+      const checkCharacteristic = () => {
+        if (selectedDevice?.characteristic) {
+          resolve();
+        } else if (attempts >= maxAttempts) {
+          reject(new Error("Timeout waiting for characteristic"));
+        } else {
+          attempts++;
+          setTimeout(checkCharacteristic, 100);
+        }
+      };
+      checkCharacteristic();
+    });
   };
 
   const connectToDevice = async (device: DetectedDevice) => {
@@ -194,16 +210,12 @@ export default function DetectPage() {
                               return;
                             }
                             await connectToDevice(device);
+                            await waitForCharacteristic();
                             // First read the peripheral's userId
                             await readValue();
-                            // Then send our userId
-                            if (!selectedDevice?.characteristic) {
-                              throw new Error("No device connected");
-                            }
-                            const encoder = new TextEncoder();
-                            await selectedDevice.characteristic.writeValue(
-                              encoder.encode(userId),
-                            );
+                            // Then send our userId using writeValue
+                            setMessage(userId);
+                            await writeValue();
                           } catch (err) {
                             setError((err as Error).message);
                           }

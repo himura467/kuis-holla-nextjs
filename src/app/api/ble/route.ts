@@ -4,7 +4,7 @@ export const runtime = "nodejs";
 import bleServer from "../../../ble/main.js";
 
 export async function POST(request: Request) {
-  const { action, userId } = await request.json();
+  const { action, userId, onCharacteristicWrite } = await request.json();
 
   if (action === "start") {
     const status = bleServer.getServerStatus();
@@ -13,7 +13,14 @@ export async function POST(request: Request) {
     }
 
     try {
-      const started = bleServer.startBleServer({ userId });
+      const started = bleServer.startBleServer({
+        userId,
+        onCharacteristicWrite: (value: string) => {
+          console.log("Characteristic write value:", value);
+          // Note: We can't directly call the frontend callback here since it's serialized
+          // Instead, we'll rely on the characteristic's value change event in the frontend
+        },
+      });
       if (started) {
         return NextResponse.json({ status: "started" });
       } else {

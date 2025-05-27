@@ -30,7 +30,7 @@ export default function SelectEventPage() {
   }, []);
 
   const handleSelect = (eventId: number) => {
-    alert(`イベントID ${eventId} を選択しました`);
+    //alert(`イベントID ${eventId} を選択しました`);
     router.push(`/event/${eventId}`);
   };
 
@@ -50,6 +50,9 @@ export default function SelectEventPage() {
           ))}
         </ul>
       )}
+      <button onClick={() => router.push("/mypage")} className="backButton">
+        戻る
+      </button>
     </main>
   );
 }

@@ -80,10 +80,16 @@ export default function EventRegisterForm() {
         value={endTime}
         onChange={(e) => setEndTime(e.target.value)}
       />
-
-      <button className="button" onClick={handleSubmit}>
-        登録
-      </button>
+      <div>
+        <button className="forwardButton" onClick={handleSubmit}>
+          登録
+        </button>
+      </div>
+      <div>
+        <button className="backButton" onClick={() => router.push("/mypage")}>
+          戻る
+        </button>
+      </div>
     </main>
   );
 }

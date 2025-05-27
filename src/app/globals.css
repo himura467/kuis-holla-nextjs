@@ -4,6 +4,7 @@
   position: relative;
   background-color: #fff4db;
   padding: 40px;
+  padding-bottom: 100px;
   border-radius: 16px;
   max-width: 500px;
   margin: 60pt auto;
@@ -15,11 +16,61 @@
   top: 16px;
   right: 16px;
   padding: 8px 16px;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--button-bg); /* 黄色に変更 */
   color: #000000;
-  border: "2px solid #ffc40c";
+  border: 2px solid var(--button-bg); /* ボーダーも黄色に */
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logoutButton:hover {
+  background-color: var(--button-hover); /* ホバー時にやや明るく */
+}
+
+.forwardButton {
+  position: relative;
+  margin-top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  background-color: var(--button-bg); /* ← 統一 */
+  color: white; /* ← 統一 */
+  border: none; /* ← 統一 */
+  border-radius: 8px; /* ← 統一 */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+  z-index: 1000;
+}
+
+.forwardButton:hover {
+  background-color: var(--button-hover); /* ← 統一 */
+}
+
+.backButton {
+  position: relative;
+  margin-top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  background-color: white;
+  color: var(--button-bg);
+  border: 2px solid var(--button-bg);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  z-index: 1000;
+}
+
+.backButton:hover {
+  background-color: var(--button-hover);
+  color: white;
 }
 
 .title {

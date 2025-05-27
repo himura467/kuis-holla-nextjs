@@ -8,8 +8,6 @@ import styles from "../app/profile/profile.module.css";
 export default function Profile() {
   const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
-  const { name, password } = useUserStore();
-
   const [gender, setGender] = useState("");
   const [department, setDepartment] = useState("");
   const [hobby, setHobby] = useState("");

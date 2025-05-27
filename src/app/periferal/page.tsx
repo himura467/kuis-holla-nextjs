@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 interface ServerStatus {
   status: "running" | "stopped" | "error";
@@ -13,15 +14,78 @@ export default function PeripheralPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  // Start BLE server when page loads
+  const [userId, setUserId] = useState<string | null>(null);
+  const [centralUserId, setCentralUserId] = useState<string | null>(null);
+
+  // Fetch user ID when component mounts
   useEffect(() => {
-    startServer();
+    const fetchUserId = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
+          {
+            withCredentials: true,
+          },
+        );
+        setUserId(res.data.id);
+      } catch (error) {
+        console.error("Failed to fetch user ID:", error);
+        setServerStatus({
+          status: "error",
+          message: "Failed to fetch user ID",
+        });
+      }
+    };
+
+    fetchUserId();
+  }, []);
+
+  // Start BLE server when userId is available
+  useEffect(() => {
+    if (!userId) return;
+
+    const startServerWithUserId = async () => {
+      try {
+        const response = await fetch("/api/ble", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action: "start",
+            userId: userId,
+            onCharacteristicWrite: (value: string) => {
+              // Update the centralUserId when we receive a write
+              setCentralUserId(value);
+            },
+          }),
+        });
+        const data = await response.json();
+
+        if (data.status === "started" || data.status === "already_running") {
+          setServerStatus({ status: "running" });
+        } else {
+          setServerStatus({
+            status: "error",
+            message: data.message || "Failed to start server",
+          });
+        }
+      } catch (error) {
+        setServerStatus({
+          status: "error",
+          message: (error as Error).message,
+        });
+      }
+    };
+
+    startServerWithUserId();
 
     // Cleanup on unmount
     return () => {
       stopServer();
+      setCentralUserId(null); // Clear the central user ID when stopping
     };
-  }, []);
+  }, [userId]);
 
   // Periodically check server status
   useEffect(() => {
@@ -92,6 +156,7 @@ export default function PeripheralPage() {
 
       if (data.status === "stopped" || data.status === "not_running") {
         setServerStatus({ status: "stopped" });
+        setCentralUserId(null); // Clear the central user ID when server stops
       } else {
         setServerStatus({
           status: "error",
@@ -163,6 +228,13 @@ export default function PeripheralPage() {
             <p>Name: KuisHolla</p>
             <p>Service UUID: 00000000-0000-0000-0000-000000000000</p>
             <p>Characteristic UUID: 00000001-0000-0000-0000-000000000000</p>
+            <p>My User ID: {userId}</p>
+            {centralUserId && (
+              <div className="mt-4 p-3 bg-blue-50 rounded">
+                <h3 className="font-semibold mb-2">話しかけてきたユーザー</h3>
+                <p>User ID: {centralUserId}</p>
+              </div>
+            )}
           </div>
         </div>
       )}

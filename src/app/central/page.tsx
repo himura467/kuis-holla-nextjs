@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 interface DetectedDevice {
   name: string;
@@ -22,6 +23,26 @@ export default function DetectPage() {
   );
   const [message, setMessage] = useState<string>("");
   const [receivedData, setReceivedData] = useState<string>("");
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
+          {
+            withCredentials: true,
+          },
+        );
+        setUserId(res.data.id);
+      } catch (error) {
+        console.error("Failed to fetch user ID:", error);
+        setError("Failed to fetch user ID");
+      }
+    };
+
+    fetchUserId();
+  }, []);
 
   const startScanning = async () => {
     try {
@@ -156,14 +177,45 @@ export default function DetectPage() {
               <li key={device.id} className="p-3 border rounded">
                 <p>Name: {device.name}</p>
                 <p className="text-sm text-gray-600">ID: {device.id}</p>
-                {!selectedDevice && (
-                  <button
-                    onClick={() => connectToDevice(device)}
-                    className="mt-2 bg-green-500 text-white px-3 py-1 rounded"
-                  >
-                    Connect
-                  </button>
-                )}
+                <div className="mt-2 space-x-2">
+                  {!selectedDevice && (
+                    <>
+                      <button
+                        onClick={() => connectToDevice(device)}
+                        className="bg-green-500 text-white px-3 py-1 rounded"
+                      >
+                        Connect
+                      </button>
+                      <button
+                        onClick={async () => {
+                          try {
+                            if (!userId) {
+                              setError("User ID not available");
+                              return;
+                            }
+                            await connectToDevice(device);
+                            // First read the peripheral's userId
+                            await readValue();
+                            // Then send our userId
+                            if (!selectedDevice?.characteristic) {
+                              throw new Error("No device connected");
+                            }
+                            const encoder = new TextEncoder();
+                            await selectedDevice.characteristic.writeValue(
+                              encoder.encode(userId),
+                            );
+                          } catch (err) {
+                            setError((err as Error).message);
+                          }
+                        }}
+                        className="bg-blue-500 text-white px-3 py-1 rounded"
+                        disabled={!userId}
+                      >
+                        話しかけたい
+                      </button>
+                    </>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
@@ -184,15 +236,6 @@ export default function DetectPage() {
           </button>
 
           <div className="space-y-4">
-            <div>
-              <button
-                onClick={readValue}
-                className="bg-blue-500 text-white px-3 py-1 rounded"
-              >
-                Read Value
-              </button>
-            </div>
-
             <div className="flex space-x-2">
               <input
                 type="text"
@@ -212,7 +255,7 @@ export default function DetectPage() {
 
             {receivedData && (
               <div className="mt-4">
-                <h3 className="font-semibold">Received Data:</h3>
+                <h3 className="font-semibold">User ID:</h3>
                 <p className="mt-1 p-2 bg-gray-100 rounded">{receivedData}</p>
               </div>
             )}

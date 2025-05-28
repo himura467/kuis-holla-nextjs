@@ -19,6 +19,11 @@ export default function QuestionPage() {
 
   const handleSubmit = async () => {
     try {
+      if (!q1 || !q2 || !q3 || !q4) {
+        alert("すべての質問に答えてください");
+        return;
+      }
+
       setUser("q1", q1);
       setUser("q2", q2);
       setUser("q3", q3);

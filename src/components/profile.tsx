@@ -27,6 +27,19 @@ export default function Profile() {
     const filteredLanguages = languages.filter((l) => l.trim() !== "");
     const filteredHobbies = hobbies.filter((h) => h.trim() !== "");
 
+    if (
+      !gender ||
+      !department ||
+      !hometown ||
+      !languages ||
+      !filteredLanguages ||
+      !photo ||
+      !hobbies
+    ) {
+      alert("すべて記入してください");
+      return;
+    }
+
     // Zustand に保存（送信はしない）
     setUser("gender", gender);
     setUser("department", department);
@@ -43,7 +56,7 @@ export default function Profile() {
       <h1 className={styles.title}>プロフィール登録</h1>
 
       <h2 className={styles.label}>顔写真登録</h2>
-      <p>※顔の分かる写真をアップロードてください</p>
+      <p>※顔の分かる写真をアップロードしてください</p>
       <input
         className={styles.input}
         type="file"
@@ -127,10 +140,11 @@ export default function Profile() {
       >
         +趣味を追加する
       </button>
-
-      <button className={styles.button} onClick={handleProfileSubmit}>
-        次へ
-      </button>
+      <div>
+        <button className={styles.button} onClick={handleProfileSubmit}>
+          次へ
+        </button>
+      </div>
     </div>
   );
 }

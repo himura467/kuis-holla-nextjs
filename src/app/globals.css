@@ -11,21 +11,64 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
+.sub_container {
+  display: flex;
+  align-items: center; /* 縦方向中央揃え */
+  justify-content: center; /* 横方向中央揃え（全体を中央寄せ） */
+  gap: 32px;
+}
+
+.rounded-container {
+  background-color: #f0f0f0;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 600px;
+  margin: 40px auto;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-container h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #333;
+  padding-bottom: 8px;
+  text-align: center;
+}
+
+.rounded-container ul {
+  list-style-type: disc;
+  padding-left: 80px;
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 1.8; /* 行間を広めに */
+}
+
+.rounded-container li {
+  margin-bottom: 0px;
+}
+
 .logoutButton {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  padding: 8px 16px;
-  background-color: var(--button-bg); /* 黄色に変更 */
-  color: #000000;
-  border: 2px solid var(--button-bg); /* ボーダーも黄色に */
-  border-radius: 4px;
+  top: 30px;
+  right: 30px;
+  padding: 10px 20px;
+  background-color: white;
+  color: var(--button-bg);
+  border: 2px solid var(--button-bg);
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  font-size: 16px;
+  font-weight: bold;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  z-index: 1000;
 }
 
 .logoutButton:hover {
-  background-color: var(--button-hover); /* ホバー時にやや明るく */
+  background-color: var(--button-hover);
+  color: white;
 }
 
 .forwardButton {
@@ -39,7 +82,7 @@
   border: none; /* ← 統一 */
   border-radius: 8px; /* ← 統一 */
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   transition: background-color 0.2s ease;
   z-index: 1000;
@@ -60,7 +103,7 @@
   border: 2px solid var(--button-bg);
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   transition:
     background-color 0.2s ease,
@@ -95,9 +138,10 @@ body {
 
 .label {
   display: block;
-  font-size: 16px;
+  font-size: 20px;
+  font-weight: bold;
   margin-top: 20px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   color: #444;
 }
 
@@ -124,7 +168,7 @@ body {
   padding: 12px;
   background-color: var(--button-bg);
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   border: none;
   border-radius: 8px;
   cursor: pointer;

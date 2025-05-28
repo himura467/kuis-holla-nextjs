@@ -16,7 +16,6 @@ export default function ProfileEdit() {
   const [language, setLanguage] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
-  const [initialImageUrl, setInitialImageUrl] = useState<string | null>(null); // 最初に取得した画像URL
 
   const axiosAuth = axios.create({ withCredentials: true });
 
@@ -37,7 +36,6 @@ export default function ProfileEdit() {
 
         const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/image?cb=${Date.now()}`;
         setImageUrl(url);
-        setInitialImageUrl(url);
       } catch (error) {
         console.error(error);
         alert("ユーザ情報の取得に失敗しました");
@@ -94,7 +92,7 @@ export default function ProfileEdit() {
         );
       }
 
-      alert("プロフィール更新完了！");
+      alert("更新されました");
       router.push("/mypage");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -110,17 +108,11 @@ export default function ProfileEdit() {
     }
   };
 
-  const handleImageDelete = async () => {
-    if (initialImageUrl) {
-      setImageUrl(initialImageUrl);
-    }
-  };
-
   return (
     <div className="container">
       <h1 className="title">プロフィール編集</h1>
 
-      <p className="label">ユーザー名</p>
+      <p className="label">氏名</p>
       <p style={{ marginBottom: "10px" }}>{name}</p>
 
       <label className="label">顔写真</label>
@@ -137,15 +129,6 @@ export default function ProfileEdit() {
             alt="プロフィール画像"
             style={{ maxWidth: "200px", height: "auto", borderRadius: "8px" }}
           />
-          <div>
-            <button
-              type="button"
-              onClick={handleImageDelete}
-              style={{ marginTop: "8px" }}
-            >
-              画像を元に戻す
-            </button>
-          </div>
         </div>
       )}
 
@@ -192,10 +175,16 @@ export default function ProfileEdit() {
         value={hobby}
         onChange={(e) => setHobby(e.target.value)}
       />
-
-      <button className="button" onClick={handleProfileUpdate}>
-        更新
-      </button>
+      <div>
+        <button className="forwardButton" onClick={handleProfileUpdate}>
+          更新
+        </button>
+      </div>
+      <div>
+        <button className="backButton" onClick={() => router.push("/mypage")}>
+          戻る
+        </button>
+      </div>
     </div>
   );
 }

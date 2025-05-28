@@ -9,7 +9,7 @@ interface Profile {
   gender: string;
   department?: string;
   hometown?: string;
-  hobbies?: string;
+  hobbies?: string[];
   languages?: string[];
 }
 
@@ -98,7 +98,9 @@ export default function ConversationTopic() {
               </p>
 
               <p>
-                <strong>趣味:</strong> {profile.hobbies || "未登録"}
+                <strong>趣味:</strong>
+                {""}
+                {(profile.hobbies || []).join(", ") || "未登録"}
               </p>
             </div>
           )}

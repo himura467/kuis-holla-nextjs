@@ -38,7 +38,10 @@ export default function LoginForm() {
     } catch (error: unknown) {
       const err = error as AxiosError;
       const data = err.response?.data as { detail?: string };
-      alert("ログイン失敗：" + (data?.detail || err.message));
+      alert(
+        "正しい氏名とパスワードを入力してください" +
+          (data?.detail || err.message),
+      );
     }
   };
 
@@ -46,7 +49,7 @@ export default function LoginForm() {
     <main className="container">
       <h2 className="title">ログインフォーム</h2>
 
-      <label className="label">ユーザー名</label>
+      <label className="label">氏名</label>
       <input
         type="text"
         value={username}
@@ -61,14 +64,16 @@ export default function LoginForm() {
         onChange={(e) => setPassword(e.target.value)}
         className="input"
       />
-
-      <button onClick={handleLogin} className="button">
-        ログイン
-      </button>
-
-      <button onClick={() => router.push("/register")} className="button">
-        新規登録
-      </button>
+      <div>
+        <button onClick={handleLogin} className="forwardButton">
+          ログイン
+        </button>
+      </div>
+      <div>
+        <button onClick={() => router.push("/register")} className="backButton">
+          新規登録
+        </button>
+      </div>
     </main>
   );
 }

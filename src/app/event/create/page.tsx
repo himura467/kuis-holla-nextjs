@@ -15,7 +15,11 @@ export default function EventRegisterForm() {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(
+      if (!eventName || !place || !startTime || !endTime || !eventAbstract) {
+        alert("すべて記入してください");
+        return;
+      }
+      await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/register`,
         {
           event_name: eventName,
@@ -31,7 +35,7 @@ export default function EventRegisterForm() {
           withCredentials: true,
         },
       );
-      alert("登録成功！イベントID: " + response.data.id);
+      alert("イベントを登録しました");
       router.push("/mypage");
     } catch (error: unknown) {
       const err = error as AxiosError;

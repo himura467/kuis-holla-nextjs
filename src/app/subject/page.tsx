@@ -6,9 +6,10 @@ import { useRouter } from "next/navigation";
 
 interface Profile {
   name: string;
+  gender: string;
   department?: string;
   hometown?: string;
-  hobby?: string;
+  hobbies?: string;
   languages?: string[];
 }
 
@@ -66,7 +67,7 @@ export default function ConversationTopic() {
       <p className="title">マッチした相手</p>
 
       {/* 画像 + プロフィール 横並び */}
-      <div className="flex">
+      <div className="sub_container">
         {/* 画像 */}
         <div className="w-32 h-32 rounded overflow-hidden border">
           <img
@@ -76,34 +77,37 @@ export default function ConversationTopic() {
             style={{ maxWidth: "200px", height: "auto", borderRadius: "8px" }}
           />
         </div>
+        <div>
+          {profile && (
+            <div className="text-sm space-y-1">
+              <p>
+                <strong>名前:</strong> {profile.name}
+              </p>
+              <p>
+                <strong>話せる言語:</strong>{" "}
+                {(profile.languages || []).join(", ") || "未登録"}
+              </p>
+              <p>
+                <strong>性別:</strong> {profile.gender}
+              </p>
+              <p>
+                <strong>学部:</strong> {profile.department || "未登録"}
+              </p>
+              <p>
+                <strong>出身地:</strong> {profile.hometown || "未登録"}
+              </p>
 
-        {/* プロフィール情報 */}
-        {profile && (
-          <div className="text-sm space-y-1">
-            <p>
-              <strong>名前:</strong> {profile.name}
-            </p>
-            <p>
-              <strong>学部:</strong> {profile.department || "未登録"}
-            </p>
-            <p>
-              <strong>出身地:</strong> {profile.hometown || "未登録"}
-            </p>
-            <p>
-              <strong>趣味:</strong> {profile.hobby || "未登録"}
-            </p>
-            <p>
-              <strong>話せる言語:</strong>{" "}
-              {(profile.languages || []).join(", ") || "未登録"}
-            </p>
-          </div>
-        )}
+              <p>
+                <strong>趣味:</strong> {profile.hobbies || "未登録"}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* 話題リスト */}
-      <div>
-        <h2 className="text-xl font-semibold mb-2">話題</h2>
-        <ul className="list-disc pl-5 space-y-1">
+      <div className="rounded-container">
+        <h2>仲良く話せそうな話題</h2>
+        <ul>
           {topics.map((t, i) => (
             <li key={i}>{t}</li>
           ))}

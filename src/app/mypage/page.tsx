@@ -51,11 +51,11 @@ export default function MyPage() {
         >
           プロフィール変更
         </button>
-        <button className="button" onClick={() => router.push("/event/select")}>
-          イベントに参加
-        </button>
         <button className="button" onClick={() => router.push("/event/create")}>
           イベントを開催
+        </button>
+        <button className="button" onClick={() => router.push("/event/select")}>
+          イベントに参加
         </button>
       </div>
     </main>

@@ -12,7 +12,7 @@ export default function Profile() {
   const [gender, setGender] = useState("");
   const [department, setDepartment] = useState("");
   const [hometown, setHometown] = useState("");
-  const [language, setLanguage] = useState("");
+  const [language, setLanguage] = useState<string[]>([""]);
   const [photo, setPhoto] = useState<File | null>(null);
 
   const [hobbies, setHobbies] = useState<string[]>([""]); // ← 複数入力対応
@@ -80,12 +80,28 @@ export default function Profile() {
       />
 
       <h2 className={styles.label}>言語</h2>
-      <input
-        className={styles.input}
-        type="text"
-        value={language}
-        onChange={(e) => setLanguage(e.target.value)}
-      />
+      {language.map((lang, index) => (
+        <input
+          key={index}
+          className={styles.input}
+          type="text"
+          value={lang}
+          onChange={(e) => {
+            const newLanguage = [...language];
+            newLanguage[index] = e.target.value;
+            setLanguage(newLanguage);
+          }}
+        />
+      ))}
+
+      <button
+        type="button"
+        className={styles.addbutton}
+        onClick={() => setLanguage([...language, ""])}
+        style={{ marginTop: "10px", backgroundColor: "#ddd", color: "#333" }}
+      >
+        +言語を追加する
+      </button>
 
       <h2 className={styles.label}>趣味</h2>
       {hobbies.map((hobby, index) => (
@@ -104,11 +120,11 @@ export default function Profile() {
 
       <button
         type="button"
-        className={styles.button}
+        className={styles.addbutton}
         onClick={() => setHobbies([...hobbies, ""])}
         style={{ marginTop: "10px", backgroundColor: "#ddd", color: "#333" }}
       >
-        +項目を追加する
+        +趣味を追加する
       </button>
 
       <button className={styles.button} onClick={handleProfileSubmit}>

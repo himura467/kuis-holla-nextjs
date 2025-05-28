@@ -12,10 +12,10 @@ export default function Profile() {
   const [gender, setGender] = useState("");
   const [department, setDepartment] = useState("");
   const [hometown, setHometown] = useState("");
-  const [language, setLanguage] = useState<string[]>([""]);
+  const [languages, setLanguage] = useState<string[]>([""]);
   const [photo, setPhoto] = useState<File | null>(null);
 
-  const [hobbies, setHobbies] = useState<string[]>([""]); // ← 複数入力対応
+  const [hobbies, setHobbies] = useState<string[]>([""]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -24,13 +24,14 @@ export default function Profile() {
 
   const handleProfileSubmit = () => {
     // 空欄を除いた趣味だけ保存
+    const filteredLanguages = languages.filter((l) => l.trim() !== "");
     const filteredHobbies = hobbies.filter((h) => h.trim() !== "");
 
     // Zustand に保存（送信はしない）
     setUser("gender", gender);
     setUser("department", department);
     setUser("hometown", hometown);
-    setUser("languages", language.split(","));
+    setUser("languages", filteredLanguages);
     setUser("photo", photo);
     setUser("hobbies", filteredHobbies);
 
@@ -80,14 +81,14 @@ export default function Profile() {
       />
 
       <h2 className={styles.label}>言語</h2>
-      {language.map((lang, index) => (
+      {languages.map((lang, index) => (
         <input
           key={index}
           className={styles.input}
           type="text"
           value={lang}
           onChange={(e) => {
-            const newLanguage = [...language];
+            const newLanguage = [...languages];
             newLanguage[index] = e.target.value;
             setLanguage(newLanguage);
           }}
@@ -97,7 +98,7 @@ export default function Profile() {
       <button
         type="button"
         className={styles.addbutton}
-        onClick={() => setLanguage([...language, ""])}
+        onClick={() => setLanguage([...languages, ""])}
         style={{ marginTop: "10px", backgroundColor: "#ddd", color: "#333" }}
       >
         +言語を追加する

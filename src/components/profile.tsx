@@ -79,30 +79,29 @@ export default function Profile() {
         onChange={(e) => setHometown(e.target.value)}
       />
 
-<h2 className={styles.label}>言語</h2>
-{language.map((lang, index) => (
-  <input
-    key={index}
-    className={styles.input}
-    type="text"
-    value={lang}
-    onChange={(e) => {
-      const newLanguage = [...language];
-      newLanguage[index] = e.target.value;
-      setLanguage(newLanguage);
-    }}
-  />
-))}
+      <h2 className={styles.label}>言語</h2>
+      {language.map((lang, index) => (
+        <input
+          key={index}
+          className={styles.input}
+          type="text"
+          value={lang}
+          onChange={(e) => {
+            const newLanguage = [...language];
+            newLanguage[index] = e.target.value;
+            setLanguage(newLanguage);
+          }}
+        />
+      ))}
 
-<button
-  type="button"
-  className={styles.addbutton}
-  onClick={() => setLanguage([...language, ""])}
-  style={{ marginTop: "10px", backgroundColor: "#ddd", color: "#333" }}
->
-  +言語を追加する
-</button>
-
+      <button
+        type="button"
+        className={styles.addbutton}
+        onClick={() => setLanguage([...language, ""])}
+        style={{ marginTop: "10px", backgroundColor: "#ddd", color: "#333" }}
+      >
+        +言語を追加する
+      </button>
 
       <h2 className={styles.label}>趣味</h2>
       {hobbies.map((hobby, index) => (

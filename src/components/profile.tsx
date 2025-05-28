@@ -34,7 +34,7 @@ export default function Profile() {
       !languages ||
       !filteredLanguages ||
       !photo ||
-      !hobbies
+      !filteredHobbies
     ) {
       alert("すべて記入してください");
       return;

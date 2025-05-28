@@ -38,7 +38,7 @@
 
 .rounded-container ul {
   list-style-type: disc;
-  padding-left: 80px;
+  padding-left: 60px;
   margin-top: 0;
   margin-bottom: 0;
   line-height: 1.8; /* 行間を広めに */
@@ -46,6 +46,8 @@
 
 .rounded-container li {
   margin-bottom: 0px;
+  list-style: none;
+  padding-left: 0;
 }
 
 .logoutButton {
@@ -177,4 +179,17 @@ body {
 
 .button:hover {
   background-color: var(--button-hover);
+}
+
+.addbutton {
+  margin-top: 30px;
+  width: 30%;
+  padding: 12px;
+  background-color: #ffc40c;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
